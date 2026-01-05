@@ -346,54 +346,78 @@ document.addEventListener('keydown', function(event) {
 
 
 (function() {
+    // We houden bij welke TYPES er al gevonden zijn
+    let foundTypes = [];
     let score = 0;
+    
+    // Er zijn nu 6 types te vinden (Protocol, Domain, Urgency, Grammar, Price, Trust)
 
     window.checkFake = function(element, type) {
-        if (element.classList.contains('found')) return;
+        
+        // 1. Markeer het element ALTIJD als gevonden (visueel rood)
+        if (!element.classList.contains('found')) {
+            element.classList.add('found');
+        }
 
-        element.classList.add('found');
-        score++;
-        document.getElementById('score').innerText = score;
+        // 2. Bepaal de uitleg tekst
+        let explanation = "";
+        switch(type) {
+            case 'protocol':
+                explanation = "De verbinding is niet veilig ('http' in plaats van 'https') en de browser waarschuwt hiervoor. Vul nooit gegevens in op zo'n site!";
+                break;
+            case 'domain':
+                explanation = "Kijk goed naar het webadres. '.xyz' is een goedkope extensie die vaak door oplichters wordt gebruikt. Ook is de naam erg lang en generiek.";
+                break;
+            case 'urgency':
+                // HIER IS DE NIEUWE UITLEG VOOR DE KLOK:
+                explanation = "Dit heet 'nep-urgentie'. Oplichters gebruiken een aflopende klok om stress te creëren. Ze willen dat je stopt met kritisch nadenken en snel betaalt uit angst de 'deal' te missen.";
+                break;
+            case 'grammar':
+                explanation = "Je hebt een taalfout gevonden (zoals d/t-fouten of kromme zinnen). Professionele winkels hebben dit zelden.";
+                break;
+            case 'price':
+                explanation = "De korting is verdacht. Hoge kortingen (30%+) op gloednieuwe producten zijn vaak te mooi om waar te zijn.";
+                break;
+             case 'trust':
+                explanation = "Bedrijfsgegevens onderaan de pagina (zoals KVK nummers) zijn op nepsites vaak verzonnen of gestolen van andere bedrijven.";
+                break;
+        }
 
         const feedbackBox = document.getElementById('feedback-box');
         feedbackBox.style.display = 'block';
-        
-        let message = "Scherp gezien! ";
-        switch(type) {
-            case 'protocol':
-                message += "De verbinding is niet veilig ('http' in plaats van 'https') en de browser waarschuwt hiervoor. Vul nooit gegevens in op zo'n site!";
-                break;
-            case 'domain':
-                message += "Kijk goed naar het webadres. '.xyz' is een goedkope extensie die vaak door oplichters wordt gebruikt. Ook is de naam erg lang en generiek.";
-                break;
-            case 'grammar':
-                message += "Je hebt een taalfout gevonden (zoals d/t-fouten of kromme zinnen). Professionele winkels hebben dit zelden.";
-                break;
-            case 'price':
-                message += "De korting is verdacht. Hoge kortingen (30%+) op gloednieuwe producten zijn vaak te mooi om waar te zijn.";
-                break;
-             case 'trust':
-                message += "Bedrijfsgegevens onderaan de pagina (zoals KVK nummers) zijn op nepsites vaak verzonnen of gestolen van andere bedrijven.";
-                break;
-        }
-        feedbackBox.innerText = message;
 
-        // Na 3 gevonden items mag je door
-        if (score >= 3) {
-            const btn = document.getElementById('finish-btn');
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
-            btn.innerText = "Doorgaan (Level Gehaald)";
+        // 3. Check of dit TYPE fout al eerder gevonden is
+        if (foundTypes.includes(type)) {
+            // TYPE AL GEVONDEN: Geen punten erbij, wel uitleg tonen
+            feedbackBox.innerText = "Dat klopt ook! Dit is dezelfde soort fout (" + type + ") als je al eerder vond. \n\n" + explanation;
+        } else {
+            // NIEUW TYPE: Punten erbij!
+            foundTypes.push(type);
+            score++;
+            document.getElementById('score').innerText = score;
+            feedbackBox.innerText = "Scherp gezien! " + explanation;
+            
+            // Activeer doorgaan knop bij 6 gevonden categorieën
+            if (score >= 6) {
+                const btn = document.getElementById('finish-btn');
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+                btn.innerText = "Doorgaan (Level Gehaald)";
+                
+                feedbackBox.innerText += "\n\nFantastisch! Je hebt alle 6 de signalen gevonden en de fake website ontmaskerd.";
+            }
         }
     }
 
     window.resetGame = function() {
         score = 0;
+        foundTypes = []; 
         document.getElementById('score').innerText = '0';
         document.getElementById('feedback-box').style.display = 'none';
         document.getElementById('finish-btn').disabled = true;
         document.getElementById('finish-btn').style.opacity = '0.5';
+        document.getElementById('finish-btn').innerText = "Doorgaan (vind ze alle 6)";
         const foundElements = document.querySelectorAll('.fake-element.found');
         foundElements.forEach(el => el.classList.remove('found'));
     }

@@ -110,9 +110,11 @@
     <div id="website-modal" class="modal-overlay">
         <div class="modal-content" style="max-width: 1100px; width: 95%;">
             <h2>Herken de fake website</h2>
-            <p>Scroll door de website in het venster hieronder. Er zitten <strong>meerdere signalen</strong> in die aangeven dat het niet pluis is. Klik op de verdachte onderdelen!</p>
+            <p>Gebruik het vergrootglas om de website hieronder te inspecteren. Er zitten <strong>meerdere signalen</strong> in die aangeven dat het niet pluis is. Klik op de verdachte onderdelen!</p>
             
-            <p style="text-align: right; font-weight: bold; color: #666;">Gevonden: <span id="score" style="color: #2196f3;">0</span></p>
+            <p style="text-align: right; font-weight: bold; color: #666;">
+                Gevonden types: <span id="score" style="color: #2196f3;">0</span>/6
+            </p>
     
             <div class="browser-window">
                 <div class="browser-header">
@@ -127,21 +129,20 @@
                         </div>
                         
                         <div class="address-bar">
-                            <div class="fake-element url-part" onclick="checkFake(this, 'protocol')">
+                            <div class="fake-element url-part url-part-left" onclick="checkFake(this, 'protocol')">
                                 <span style="color: #d93025; margin-right: 5px; font-size: 12px;">ⓘ Niet beveiligd</span>
                                 <span style="color: #5f6368;">http://</span>
                             </div>
                             
-                            <div class="fake-element url-part" onclick="checkFake(this, 'domain')">
+                            <div class="fake-element url-part url-part-right" onclick="checkFake(this, 'domain')">
                                 <span style="color: #202124;">www.smartwatch-deals-snel.xyz/aanbiedingen</span>
                             </div>
                         </div>
-    
                     </div>
                 </div>
     
                 <div class="web-content">
-                    <div class="urgent-banner fake-element" onclick="checkFake(this, 'grammar')">
+                    <div class="urgent-banner fake-element" onclick="checkFake(this, 'urgency')">
                         ⚠️ LET OP: DEZE ACTIE GELD NOG MAAR 04:59 UUR! ⚠️
                     </div>
     
@@ -155,7 +156,7 @@
                     <div class="product-grid">
                         
                         <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=400&q=80" alt="Apple Watch Ultra">
+                            <img src="img/apple-1.jpg" alt="Apple Watch Ultra">
                             <h3>Apple Watch Ultra 3 (49mm)</h3>
                             <div class="product-description">
                                 <p class="fake-element" onclick="checkFake(this, 'grammar')">De grooste Apple Watch met een robuust design.</p>
@@ -170,7 +171,7 @@
                         </div>
     
                         <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?auto=format&fit=crop&w=400&q=80" alt="Apple Watch Series">
+                            <img src="img/apple-2.jpg" alt="Apple Watch Series">
                             <h3>Apple Watch Series 11 (42mm)</h3>
                             <div class="product-description">
                                 <p>Groot scherm door dunnere randen.</p>
@@ -185,7 +186,7 @@
                         </div>
     
                         <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=400&q=80" alt="Apple Watch SE">
+                            <img src="img/apple-3.jpg" alt="Apple Watch SE">
                             <h3>Apple Watch SE 3 (40mm)</h3>
                             <div class="product-description">
                                 <p class="fake-element" onclick="checkFake(this, 'grammar')">Apple Watch met stijlvol ontwerp en basis functies.</p>
@@ -199,7 +200,7 @@
                         </div>
     
                         <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=400&q=80" alt="Galaxy Watch Ultra">
+                            <img src="img/samsung-1.jpg" alt="Galaxy Watch Ultra">
                             <h3>Galaxy Watch Ultra (2025)</h3>
                             <div class="product-description">
                                 <p>Robuust en krasvrij dankzij titanium horlogekast.</p>
@@ -214,7 +215,7 @@
                         </div>
     
                          <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1615902916751-b63805b4c095?auto=format&fit=crop&w=400&q=80" alt="Galaxy Watch Classic">
+                            <img src="img/samsung-2.jpg" alt="Galaxy Watch Classic">
                             <h3>Galaxy Watch 8 Classic</h3>
                             <div class="product-description">
                                 <p class="fake-element" onclick="checkFake(this, 'grammar')">Met de draaiende ring scrol je gemakkelijk door apps.</p>
@@ -228,7 +229,7 @@
                         </div>
     
                          <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1570514806059-4d6d63493010?auto=format&fit=crop&w=400&q=80" alt="Galaxy Watch Standard">
+                            <img src="img/samsung-3.jpg" alt="Galaxy Watch Standard">
                             <h3>Galaxy Watch 8</h3>
                             <div class="product-description">
                                 <p class="fake-element" onclick="checkFake(this, 'grammar')">Lichtgewicht ontwerp dankzij de aluminium kast.</p>
@@ -256,7 +257,7 @@
     
             <div class="modal-buttons margin-bottom-buttons" style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
                 <button class="cancel-btn" onclick="closeModal()">Stoppen</button>
-                <button class="save-btn" onclick="finishWebsiteGame()" id="finish-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Doorgaan (vind er minstens 3)</button>
+                <button class="save-btn" onclick="finishWebsiteGame()" id="finish-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Doorgaan (vind ze alle 5)</button>
             </div>
         </div>
     </div>
