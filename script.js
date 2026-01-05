@@ -18,37 +18,39 @@ let isModalOpen = false;
 let level1Unlocked = false; 
 
 // --- HET VERHAAL (DATA) ---
-// Voor elke slide (0, 1, 2, 3, 4) zijn er 3 regels tekst.
 const storyLines = [
-    // Slide 1 (Index 0)
+    // Slide 1 (Introductie & Lore)
     [
-        "Welkom bij CyberSecurity Corp. Het is je eerste dag.",
-        "Er lijkt iets mis te zijn met de systemen vandaag.",
-        "Loop even rond en kijk of je iets vreemds ziet."
+        "Cyber Detective Agency, maandagochtend. De koffie is nog warm.",
+        "Mijn taak? Digitale mysteries oplossen en mensen online veilig houden.",
+        "Mijn inbox is leeg... het lijkt er zowaar op dat het een rustige dag gaat worden."
     ],
-    // Slide 2 (Index 1)
+    // Slide 2 (Klant komt binnen)
     [
-        "Je komt aan bij de serverruimte.",
-        "De lichten knipperen en het is er ijskoud.",
-        "Ik heb het gevoel dat we niet alleen zijn..."
+        "*Klingeling*... De deur gaat open.",
+        "Sprak ik te vroeg? Een vrouw stapt aarzelend mijn kantoor binnen.",
+        "Ze ziet eruit alsof ze digitaal de weg volledig kwijt is."
     ],
-    // Slide 3 (Index 2)
+    // Slide 3 (Het probleem uitleggen)
     [
-        "Hé, kijk daar op dat bureau.",
-        "Iemand heeft zijn computer onbeheerd achtergelaten.",
-        "Dit is een groot risico. Laten we dichterbij kijken."
+        "\"Hoi, ik ben Karen,\" zegt ze zachtjes.",
+        "\"Ik heb een probleem. Ik ben voor de zoveelste keer mijn wachtwoord vergeten!\"",
+        "\"Mijn vorige was 'Karen123', maar mijn neefje zei dat dat niet veilig is.\"",
+        "\"Kun jij me alsjeblieft helpen een écht sterk wachtwoord te maken?\""
     ],
-    // Slide 4 (Index 3 - De Computer Game)
+    // Slide 4 (Minigame trigger)
     [
-        "De computer staat nog aan en vraagt om een nieuw wachtwoord.",
-        "Hackers kunnen makkelijk inbreken als dit niet veilig is.",
-        "Klik op de rode cirkel en beveilig dit systeem!"
+        "Geen probleem, Karen. Laten we meteen naar je laptop kijken.",
+        "We gaan een wachtwoord maken dat hackers onmogelijk kunnen raden.",
+        "Denk eraan: gebruik geen namen, maar wel tekens en cijfers.",
+        "Klik op de rode cirkel op het scherm om de beveiliging te starten!"
     ],
-    // Slide 5 (Index 4 - Volgende level)
+    // Slide 5 (Succes & Afsluiting)
     [
-        "Goed gedaan! Het systeem is weer veilig.",
-        "De serverruimte lijkt weer stabiel.",
-        "Op naar de volgende uitdaging."
+        "\"Wauw, dat is een stuk veiliger! Bedankt, detective!\"",
+        "Karen loopt opgelucht naar de deur. Haar data is weer veilig.",
+        "\"Tot ziens, Karen! En onthoud: plak het niet op een geeltje onder je toetsenbord!\"",
+        "Tijd voor weer een slok koffie... Wie is de volgende?"
     ]
 ];
 
