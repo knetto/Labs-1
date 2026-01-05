@@ -327,3 +327,22 @@ img.slide {
         font-size: 1rem;
     }
 }
+
+/* Optioneel: Specifieke stijl voor de plak-waarschuwing (Oranje thema) */
+#paste-warning-modal .warning-content {
+    border-color: #ffaa00;
+    background-color: #2a1a00; /* Zeer donker oranje/bruin */
+}
+
+#paste-warning-modal h2 {
+    color: #ffaa00;
+}
+
+#paste-warning-modal .warning-btn {
+    background-color: #ffaa00;
+    color: black;
+}
+
+#paste-warning-modal .warning-btn:hover {
+    background-color: #cc8800;
+}

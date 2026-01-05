@@ -42,14 +42,14 @@
             <label>Nieuw wachtwoord</label>
             <div class="input-wrapper">
                 <input type="password" id="pass1" placeholder="Typ je wachtwoord..." 
-                       onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off">
+                       oncopy="return false;" oncut="return false;" autocomplete="off">
                 <span class="eye-icon" onclick="togglePassword('pass1', this)">👁️</span>
             </div>
             
             <label>Bevestig wachtwoord</label>
             <div class="input-wrapper">
                 <input type="password" id="pass2" placeholder="Typ het nogmaals..." 
-                       onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off">
+                       oncopy="return false;" oncut="return false;" autocomplete="off">
                 <span class="eye-icon" onclick="togglePassword('pass2', this)">👁️</span>
             </div>
 
@@ -64,8 +64,30 @@
         <div class="modal-content warning-content">
             <h2 style="color: #ff4444;">⚠️ BEVEILIGINGS RISICO ⚠️</h2>
             <p><strong>Je gebruikt een persoonlijke naam (Karen).</strong></p>
-            <p>Dit is gevaarlijk! Hackers gebruiken "Social Engineering".</p>
+            <p>
+                Dit is gevaarlijk! Hackers gebruiken "Social Engineering". 
+                Ze zoeken op Facebook/Instagram naar namen van jou, je partner, 
+                kinderen of huisdieren en proberen die als eerst.
+            </p>
+            <p><em>Gebruik NOOIT een naam in je wachtwoord.</em></p>
+            
             <button class="warning-btn" onclick="closeWarning()">Ik begrijp het</button>
+        </div>
+    </div>
+
+    <div id="paste-warning-modal" class="modal-overlay" style="z-index: 210;">
+        <div class="modal-content warning-content" style="border-color: #ffaa00; background-color: #221100;">
+            <h2 style="color: #ffaa00;">⚠️ Waarom niet plakken?</h2>
+            <p><strong>Het is belangrijk dat je het hier zelf typt.</strong></p>
+            <p style="font-size: 0.9em; line-height: 1.5;">
+                Stel je hebt een typefout gemaakt in het eerste veld... <br>
+                Als je die fout kopieert naar dit veld, sluit je jezelf buiten!
+            </p>
+            <p style="font-size: 0.9em;">
+                Door het opnieuw te typen, controleer je of je het wachtwoord écht kent.
+            </p>
+            
+            <button class="warning-btn" onclick="closePasteWarning()" style="background-color: #ffaa00; color: black;">Ik snap het</button>
         </div>
     </div>
 

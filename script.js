@@ -1,23 +1,32 @@
-// --- 1. VARIABELEN & DATA ---
+// ==========================================
+// 1. VARIABELEN & SELECTIES
+// ==========================================
+
+// Slider elementen
 const slides = document.querySelectorAll('.slide');
 const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
 const dialogueText = document.getElementById('dialogue-text');
 
-// Modals
-const passwordModal = document.getElementById('password-modal');
-const warningModal = document.getElementById('warning-modal');
+// Modals (Popups)
+const passwordModal = document.getElementById('password-modal');       // De minigame
+const warningModal = document.getElementById('warning-modal');         // Karen waarschuwing (Rood)
+const pasteWarningModal = document.getElementById('paste-warning-modal'); // Plak waarschuwing (Oranje)
+
+// Minigame elementen
 const errorBox = document.getElementById('error-box');
 const passInput1 = document.getElementById('pass1');
 const passInput2 = document.getElementById('pass2');
 
 // Status variabelen
 let currentSlide = 0;
-let currentLine = 0; // NIEUW: Houdt bij welke regel tekst we zijn
-let isModalOpen = false; 
-let level1Unlocked = false; 
+let currentLine = 0;        // Houdt bij welke regel tekst we zijn
+let isModalOpen = false;    // Is er een popup open?
+let level1Unlocked = false; // Is de minigame gewonnen?
 
-// --- HET VERHAAL (DATA) ---
+// ==========================================
+// 2. HET VERHAAL (DATA)
+// ==========================================
 const storyLines = [
     // Slide 1 (Introductie & Lore)
     [
@@ -35,15 +44,15 @@ const storyLines = [
     [
         "\"Hoi, ik ben Karen,\" zegt ze zachtjes.",
         "\"Ik heb een probleem. Ik ben voor de zoveelste keer mijn wachtwoord vergeten!\"",
-        "\"Mijn vorige was 'Karen123', maar mijn neefje zei dat dat niet veilig is.\"",
+        "\"Mijn vorige was 'Flappie123', maar mijn neefje zei dat dat niet veilig is.\"",
         "\"Kun jij me alsjeblieft helpen een écht sterk wachtwoord te maken?\""
     ],
-    // Slide 4 (Minigame trigger)
+    // Slide 4 (Minigame trigger - Level 1)
     [
         "Geen probleem, Karen. Laten we meteen naar je laptop kijken.",
         "We gaan een wachtwoord maken dat hackers onmogelijk kunnen raden.",
         "Denk eraan: gebruik geen namen, maar wel tekens en cijfers.",
-        "Klik op de rode cirkel op het scherm om de beveiliging te starten!"
+        "Klik op de rode cirkel op het scherm om te starten!"
     ],
     // Slide 5 (Succes & Afsluiting)
     [
@@ -54,11 +63,13 @@ const storyLines = [
     ]
 ];
 
-// Initialiseer
+// Start de pagina correct op
 updateDialogue();
 updateUI(); 
 
-// --- 2. NAVIGATIE LOGICA (NIEUW) ---
+// ==========================================
+// 3. NAVIGATIE & DIALOOG LOGICA
+// ==========================================
 
 // Wordt aangeroepen door Pijltje Rechts of knop Volgende
 function handleNext() {
@@ -89,23 +100,27 @@ function handlePrev() {
     }
 }
 
+// Update de tekst in het zwarte balkje
 function updateDialogue() {
-    // Haal de juiste tekst op uit de array
-    // storyLines[huidigeSlide][huidigeRegel]
     const text = storyLines[currentSlide][currentLine];
     dialogueText.innerText = text;
 }
 
-// --- 3. SLIDER FUNCTIES ---
+// ==========================================
+// 4. SLIDER FUNCTIES
+// ==========================================
 
 function changeSlide(direction) {
     // Check slotje voor Level 1 (Slide 4 -> 5)
+    // Slide 4 heeft index 3. Als we daar zijn, naar rechts willen (1), en level is NIET unlocked...
     if (currentSlide === 3 && direction === 1 && !level1Unlocked) {
-        alert("Los eerst de puzzel op door op de cirkel te klikken!");
+        // ...Dan doen we NIETS. (Geen alert, gewoon blokkeren)
         return; 
     }
 
     let newIndex = currentSlide + direction;
+
+    // Check of we niet buiten de reeks gaan (kleiner dan 0 of groter dan max)
     if (newIndex < 0 || newIndex >= slides.length) return;
 
     // Slide wissel
@@ -113,13 +128,11 @@ function changeSlide(direction) {
     currentSlide = newIndex;
     slides[currentSlide].classList.add('active');
 
-    // NIEUW: Reset de tekst naar regel 0 bij een nieuwe slide
-    // Tenzij we teruggaan? (Voor nu resetten we altijd naar begin van de slide)
+    // Reset de tekst naar regel 0 bij een nieuwe slide (vooruit)
+    // Als we teruggaan, zetten we hem op de laatste regel
     if (direction === 1) {
         currentLine = 0; 
     } else {
-        // Als je teruggaat, wil je misschien de laatste regel zien?
-        // Laten we voor simpelheid ook naar 0 gaan, of naar het einde:
         currentLine = storyLines[currentSlide].length - 1;
     }
 
@@ -127,10 +140,12 @@ function changeSlide(direction) {
     updateUI();
 }
 
+// Knoppen verbergen/tonen op basis van positie
 function updateUI() {
+    // Vorige knop weg bij allereerste begin
     prevBtn.style.display = (currentSlide === 0 && currentLine === 0) ? 'none' : 'block';
     
-    // Verberg 'volgende' knop alleen als we écht op het einde zijn
+    // Volgende knop weg bij allerlaatste einde
     if (currentSlide === slides.length - 1 && currentLine === storyLines[currentSlide].length - 1) {
         nextBtn.style.display = 'none';
     } else {
@@ -138,14 +153,27 @@ function updateUI() {
     }
 }
 
-// --- 4. MINIGAME LOGICA ---
+// ==========================================
+// 5. MINIGAME & POPUP LOGICA
+// ==========================================
 
 function openModal() {
+    // Check of de speler de dialoog heeft afgelezen.
+    // De minigame mag pas openen als we op de laatste regel van de slide zijn.
+    if (currentLine < storyLines[currentSlide].length - 1) {
+        return;
+    }
+
     passwordModal.style.display = 'flex';
     isModalOpen = true;
-    passInput1.value = ""; passInput2.value = "";
-    errorBox.style.display = 'none'; errorBox.innerHTML = "";
-    passInput1.type = "password"; passInput2.type = "password";
+    
+    // Reset velden bij openen
+    passInput1.value = ""; 
+    passInput2.value = "";
+    errorBox.style.display = 'none'; 
+    errorBox.innerHTML = "";
+    passInput1.type = "password"; 
+    passInput2.type = "password";
 }
 
 function closeModal() {
@@ -157,74 +185,128 @@ function closeWarning() {
     warningModal.style.display = 'none';
 }
 
+function closePasteWarning() {
+    pasteWarningModal.style.display = 'none';
+}
+
+// Het oogje: Wissel tussen password (bolletjes) en text (leesbaar)
 function togglePassword(inputId, iconElement) {
     const input = document.getElementById(inputId);
     if (input.type === "password") {
         input.type = "text";
-        iconElement.textContent = "🙈";
+        iconElement.textContent = "🙈"; // Aapje kijkt niet (of open oog, wat je wil)
     } else {
         input.type = "password";
         iconElement.textContent = "👁️";
     }
 }
 
+// De Wachtwoord Check Functie
 function checkPassword() {
     const p1 = passInput1.value;
     const p2 = passInput2.value;
     let errors = [];
 
+    // Lijsten met verboden patronen
     const forbiddenSequences = ["01234567890", "09876543210", "abcdefghijklmnopqrstuvwxyz", "qwertyuiop", "asdfghjkl", "zxcvbnm"];
+    const commonWeakWords = ["welkom", "wachtwoord", "password", "geheim", "admin", "login", "flappie", "hallo", "voetbal", "123456"];
 
+    // --- DE VALIDATIES ---
+
+    // 1. KAREN CHECK (Directe stop - Rood alarm)
     if (p1.toLowerCase().includes("karen")) {
         warningModal.style.display = 'flex';
-        return;
+        return; // Stop functie direct
     }
 
+    // 2. ZWAKKE WOORDEN CHECK
+    let foundWeakWord = false;
+    const lowerP1 = p1.toLowerCase();
+    for (let word of commonWeakWords) {
+        if (lowerP1.includes(word)) {
+            foundWeakWord = word;
+            break;
+        }
+    }
+    if (foundWeakWord) {
+        errors.push("Gebruik geen veelvoorkomende woorden (zoals '" + foundWeakWord + "').");
+    }
+
+    // 3. Lengte Check
     if (p1.length < 12) errors.push("Te kort (minimaal 12 tekens nodig).");
+    
+    // 4. Karakter Checks
     if (!/[A-Z]/.test(p1)) errors.push("Voeg een Hoofdletter toe.");
     if (!/[0-9]/.test(p1)) errors.push("Voeg een cijfer toe.");
     if (!/[^a-zA-Z0-9]/.test(p1)) errors.push("Voeg een leesteken toe.");
     
+    // 5. Reeksen Check (abcd, 1234)
     let foundPattern = false;
-    const lowerP1 = p1.toLowerCase();
     for (let seq of forbiddenSequences) {
         for (let i = 0; i < seq.length - 3; i++) {
-            if (lowerP1.includes(seq.substring(i, i + 4))) { foundPattern = true; break; }
+            if (lowerP1.includes(seq.substring(i, i + 4))) { 
+                foundPattern = true; break; 
+            }
         }
         if (foundPattern) break;
     }
     if (foundPattern) errors.push("Gebruik geen logische reeksen (1234, abcd).");
 
-    if (p1 !== p2) errors.push("De wachtwoorden zijn niet gelijk.");
-    else if (p1.length > 0 && p2.length === 0) errors.push("Vul het wachtwoord ook in bij bevestiging.");
+    // 6. Bevestiging Check
+    if (p1 !== p2) {
+        errors.push("De wachtwoorden zijn niet gelijk.");
+    } else if (p1.length > 0 && p2.length === 0) {
+        errors.push("Vul het wachtwoord ook in bij bevestiging.");
+    }
 
+    // --- RESULTAAT ---
     if (errors.length > 0) {
+        // FOUT: Toon rode box met lijst
         errorBox.style.display = 'block';
         let html = "<strong>Let op:</strong><ul>";
         errors.forEach(err => html += "<li>" + err + "</li>");
         html += "</ul>";
         errorBox.innerHTML = html;
     } else {
+        // GOED: Level gehaald!
         level1Unlocked = true;
         closeModal();
-        // Ga naar volgende slide (en reset tekst)
-        changeSlide(1);
+        changeSlide(1); // Ga direct door naar volgende slide
     }
 }
 
-// --- 5. EVENTS ---
+// ==========================================
+// 6. EVENTS & LISTENERS
+// ==========================================
+
+// Blokkeer rechtermuisknop op inputs (tegen spieken)
 if(passInput1) passInput1.addEventListener('contextmenu', e => e.preventDefault());
 if(passInput2) passInput2.addEventListener('contextmenu', e => e.preventDefault());
 
+// NIEUW: Blokkeer PLAKKEN in het 2e veld -> Toon Oranje Modal
+if(passInput2) {
+    passInput2.addEventListener('paste', function(event) {
+        event.preventDefault(); // Blokkeer de plak actie
+        pasteWarningModal.style.display = 'flex'; // Toon waarschuwing
+    });
+}
+
+// Toetsenbord bediening
 document.addEventListener('keydown', function(event) {
+    // Escape knop sluit de bovenste modal die open staat
     if (event.key === 'Escape') {
-        if (warningModal.style.display === 'flex') closeWarning();
-        else if (isModalOpen) closeModal();
+        if (pasteWarningModal.style.display === 'flex') {
+            closePasteWarning();
+        } else if (warningModal.style.display === 'flex') {
+            closeWarning();
+        } else if (isModalOpen) {
+            closeModal();
+        }
         return;
     }
 
+    // Navigatie met pijltjes (alleen als er geen popup open is)
     if (!isModalOpen) {
-        // Let op: We roepen nu handleNext/Prev aan i.p.v. changeSlide
         if (event.key === 'ArrowRight') handleNext();
         if (event.key === 'ArrowLeft') handlePrev();
     }
