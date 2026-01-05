@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story Slider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="slider-container">
+        <img src="img/image (1).png" class="slide active" alt="Foto 1">
+        
+        <img src="img/image (2).png" class="slide" alt="Foto 2">
+        
+        <img src="img/image (3).png" class="slide" alt="Foto 3">
+
+        <div class="slide slide-with-overlay">
+            <div class="overlay-container">
+                <img src="img/image (4).png" alt="Foto 4 met knop">
+                <div class="blinking-circle" onclick="openModal()"></div>
+            </div>
+        </div>
+
+        <img src="img/image (5).png" class="slide" alt="Foto 5">
+
+        <div class="dialogue-box">
+            <p id="dialogue-text">...</p>
+            <span class="dialogue-hint">Druk op &rarr; of klik om verder te gaan</span>
+        </div>
+
+        <button class="btn prev" onclick="handlePrev()">&#10094;</button>
+        <button class="btn next" onclick="handleNext()">&#10095;</button>
+    </div>
+
+    <div id="password-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Minigame 1: Password</h2>
+            <p style="font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Verzin een veilig wachtwoord.</p>
+            <div id="error-box" class="error-container"></div>
+            
+            <label>Nieuw wachtwoord</label>
+            <div class="input-wrapper">
+                <input type="password" id="pass1" placeholder="Typ je wachtwoord..." 
+                       onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off">
+                <span class="eye-icon" onclick="togglePassword('pass1', this)">👁️</span>
+            </div>
+            
+            <label>Bevestig wachtwoord</label>
+            <div class="input-wrapper">
+                <input type="password" id="pass2" placeholder="Typ het nogmaals..." 
+                       onpaste="return false;" oncopy="return false;" oncut="return false;" autocomplete="off">
+                <span class="eye-icon" onclick="togglePassword('pass2', this)">👁️</span>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeModal()">Afsluiten</button>
+                <button class="save-btn" onclick="checkPassword()">Verifiëren</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="warning-modal" class="modal-overlay" style="z-index: 200;">
+        <div class="modal-content warning-content">
+            <h2 style="color: #ff4444;">⚠️ BEVEILIGINGS RISICO ⚠️</h2>
+            <p><strong>Je gebruikt een persoonlijke naam (Karen).</strong></p>
+            <p>Dit is gevaarlijk! Hackers gebruiken "Social Engineering".</p>
+            <button class="warning-btn" onclick="closeWarning()">Ik begrijp het</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

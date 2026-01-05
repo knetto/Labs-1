@@ -1,0 +1,329 @@
+/* =========================================
+   1. BASIS INSTELLINGEN
+   ========================================= */
+   body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Geen scrollbalken */
+    background-color: #000;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================================
+   2. SLIDER & AFBEELDINGEN
+   ========================================= */
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #000;
+    /* Flexbox zorgt dat alles netjes in het midden staat */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Algemene stijl voor elke slide (zowel <img> als <div>) */
+.slide {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0; /* Standaard onzichtbaar */
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
+}
+
+/* Specifiek voor de simpele afbeeldingen (Slide 1, 2, 3) */
+img.slide {
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Zorgt voor de zwarte balken, foto wordt niet uitgerekt */
+}
+
+/* Zichtbare slide */
+.slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* =========================================
+   3. SPECIALE CONTAINER (SLIDE 4) & CIRKEL
+   ========================================= */
+
+/* Deze container zorgt dat de cirkel op zijn plek blijft zitten 
+   ten opzichte van de afbeelding, ongeacht schermgrootte.
+*/
+.overlay-container {
+    position: relative;
+    aspect-ratio: 16 / 9; /* De verhouding van je plaatje (1920x1080) */
+    max-width: 100vw;
+    max-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* De RODE KNIPPERENDE CIRKEL */
+.blinking-circle {
+    position: absolute;
+    
+    /* Positie relatief aan het plaatje */
+    top: 69%;
+    left: 50%;
+    width: 12.5%;
+    height: 2.5%;
+    
+    border: 7px solid red;
+    border-radius: 10px;
+
+    /* Centreren + Rotatie */
+    transform: translate(-50%, -50%) rotate(-4deg); 
+
+    pointer-events: auto; /* Zorgt dat je erop kunt klikken/hoveren */
+    cursor: pointer;
+    
+    animation: blink 1s infinite alternate;
+    z-index: 20;
+    
+    transition: background-color 0.3s ease;
+}
+
+.blinking-circle:hover {
+    background-color: rgba(255, 0, 0, 0.288);
+}
+
+@keyframes blink {
+    from { opacity: 1; }
+    to { opacity: 0.3; }
+}
+
+/* =========================================
+   4. NAVIGATIE KNOPPEN
+   ========================================= */
+.btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 15px;
+    cursor: pointer;
+    z-index: 30;
+    user-select: none;
+    transition: background 0.3s;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.prev { left: 20px; }
+.next { right: 20px; }
+
+/* =========================================
+   5. MODALS (POPUPS) ALGEMEEN
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Donkere achtergrond */
+    z-index: 100;
+    
+    display: none; /* Standaard verborgen */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #222; /* Donkergrijs venster */
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    text-align: left;
+    border: 1px solid #444;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+/* Knoppen onderin de modal */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.cancel-btn { background-color: #555; color: white; }
+.cancel-btn:hover { background-color: #666; }
+
+.save-btn { background-color: #007bff; color: white; }
+.save-btn:hover { background-color: #0056b3; }
+
+/* =========================================
+   6. INPUT VELDEN & OOGJE
+   ========================================= */
+
+/* Wrapper om input + oogje samen te houden */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 40px; /* Ruimte voor het oogje */
+    margin-bottom: 0;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: white;
+    box-sizing: border-box;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.eye-icon:hover { opacity: 1; }
+
+/* =========================================
+   7. FOUTMELDINGEN & WAARSCHUWINGEN
+   ========================================= */
+
+/* Het rode vlak met foutmeldingen in de password game */
+.error-container {
+    background-color: #3e1b1b;
+    color: #ff6b6b;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    display: none;
+    border: 1px solid #ff4444;
+}
+
+.error-container ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.error-container li {
+    margin-bottom: 5px;
+}
+
+/* De speciale stijl voor de "Karen" Warning Modal */
+.warning-content {
+    border: 2px solid red;
+    background-color: #1a0000; /* Zeer donkerrood */
+    text-align: center;
+}
+
+.warning-btn {
+    background-color: red;
+    color: white;
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.warning-btn:hover {
+    background-color: #cc0000;
+}
+
+/* --- NIEUW: DIALOOG BOX STIJL --- */
+.dialogue-box {
+    position: absolute;
+    bottom: 30px; /* Zweeft iets boven de onderkant */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 800px;
+    background-color: rgba(0, 0, 0, 0.85); /* Half doorzichtig zwart */
+    color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    border: 2px solid #555;
+    z-index: 50; /* Bovenop de foto, onder de modals */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    font-family: 'Courier New', Courier, monospace; /* Typemachine look */
+}
+
+#dialogue-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.dialogue-hint {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #aaa;
+    text-align: right;
+    font-style: italic;
+}
+
+/* Aanpassing voor mobiel */
+@media (max-width: 600px) {
+    .dialogue-box {
+        width: 90%;
+        bottom: 60px; /* Iets hoger voor mobiele knoppen */
+        padding: 15px;
+    }
+    #dialogue-text {
+        font-size: 1rem;
+    }
+}
