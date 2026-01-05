@@ -32,8 +32,8 @@
     let isModalOpen = false;    
 
     // Locks (Zet ze op false om de speler te dwingen de game te spelen)
-    let level1Unlocked = true; 
-    let level2Unlocked = true; 
+    let level1Unlocked = false; 
+    let level2Unlocked = false; 
 
 
     // ==========================================
