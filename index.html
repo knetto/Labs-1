@@ -18,11 +18,25 @@
         <div class="slide slide-with-overlay">
             <div class="overlay-container">
                 <img src="img/image (4).png" alt="Foto 4 met knop">
-                <div class="blinking-circle" onclick="openModal()"></div>
+                <div class="blinking-circle" onclick="openModal('password')"></div>
             </div>
         </div>
 
         <img src="img/image (5).png" class="slide" alt="Foto 5">
+
+        <img src="img/image (6).png" class="slide" alt="Foto 6">
+
+        <img src="img/image (7).jpg" class="slide" alt="Foto 7">
+
+        <div class="slide slide-with-overlay">
+            <div class="overlay-container">
+                <img src="img/image (8).png" alt="Foto 8 met knop">
+                <div class="blinking-circle-2" onclick="openModal('website')"></div>
+            </div>
+        </div>
+
+        <img src="img/image (9).png" class="slide" alt="Foto 9">
+
 
         <div class="dialogue-box">
             <p id="dialogue-text">...</p>
@@ -88,6 +102,162 @@
             </p>
             
             <button class="warning-btn" onclick="closePasteWarning()" style="background-color: #ffaa00; color: black;">Ik snap het</button>
+        </div>
+    </div>
+
+
+
+    <div id="website-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 1100px; width: 95%;">
+            <h2>Herken de fake website</h2>
+            <p>Scroll door de website in het venster hieronder. Er zitten <strong>meerdere signalen</strong> in die aangeven dat het niet pluis is. Klik op de verdachte onderdelen!</p>
+            
+            <p style="text-align: right; font-weight: bold; color: #666;">Gevonden: <span id="score" style="color: #2196f3;">0</span></p>
+    
+            <div class="browser-window">
+                <div class="browser-header">
+                    <div class="tab-bar">
+                        <div class="tab">
+                            <span>⌚ SmartWatch Voordeel - ...</span>
+                        </div>
+                    </div>
+                    <div class="nav-bar">
+                        <div class="nav-controls">
+                            <span>←</span> <span>→</span> <span>✕</span>
+                        </div>
+                        
+                        <div class="address-bar">
+                            <div class="fake-element url-part" onclick="checkFake(this, 'protocol')">
+                                <span style="color: #d93025; margin-right: 5px; font-size: 12px;">ⓘ Niet beveiligd</span>
+                                <span style="color: #5f6368;">http://</span>
+                            </div>
+                            
+                            <div class="fake-element url-part" onclick="checkFake(this, 'domain')">
+                                <span style="color: #202124;">www.smartwatch-deals-snel.xyz/aanbiedingen</span>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+    
+                <div class="web-content">
+                    <div class="urgent-banner fake-element" onclick="checkFake(this, 'grammar')">
+                        ⚠️ LET OP: DEZE ACTIE GELD NOG MAAR 04:59 UUR! ⚠️
+                    </div>
+    
+                    <div class="hero-section">
+                        <h1 style="margin: 0;">De Nieuwste Modellen zijn Binnen!</h1>
+                        <p class="fake-element" onclick="checkFake(this, 'grammar')" style="font-size: 1.1em; display: inline-block; margin-top: 10px;">
+                            Wij hebben de scherpste prijzen voor u pols geselecteerd.
+                        </p>
+                    </div>
+    
+                    <div class="product-grid">
+                        
+                        <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1544117519-31a4b719223d?auto=format&fit=crop&w=400&q=80" alt="Apple Watch Ultra">
+                            <h3>Apple Watch Ultra 3 (49mm)</h3>
+                            <div class="product-description">
+                                <p class="fake-element" onclick="checkFake(this, 'grammar')">De grooste Apple Watch met een robuust design.</p>
+                                <p>Uitgebreide hartslagmetingen, analyses en tips.</p>
+                                <p>Watch Ultra 3 gaat tot 2 dagen mee.</p>
+                            </div>
+                            <div class="price-box fake-element" onclick="checkFake(this, 'price')">
+                                <span class="old-price">Van € 838,-</span>
+                                <span class="new-price">VOOR € 599,-</span>
+                            </div>
+                            <button class="buy-button">BESTEL NU</button>
+                        </div>
+    
+                        <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?auto=format&fit=crop&w=400&q=80" alt="Apple Watch Series">
+                            <h3>Apple Watch Series 11 (42mm)</h3>
+                            <div class="product-description">
+                                <p>Groot scherm door dunnere randen.</p>
+                                <p>Uitgebreide gezondheidsfuncties.</p>
+                                <p class="fake-element" onclick="checkFake(this, 'grammar')">Laad elke dag je Watch op.</p>
+                            </div>
+                            <div class="price-box fake-element" onclick="checkFake(this, 'price')">
+                                <span class="old-price">Van € 449,-</span>
+                                <span class="new-price">VOOR € 319,-</span>
+                            </div>
+                            <button class="buy-button">BESTEL NU</button>
+                        </div>
+    
+                        <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=400&q=80" alt="Apple Watch SE">
+                            <h3>Apple Watch SE 3 (40mm)</h3>
+                            <div class="product-description">
+                                <p class="fake-element" onclick="checkFake(this, 'grammar')">Apple Watch met stijlvol ontwerp en basis functies.</p>
+                                <p>Je krijgt een basis hartslagmeting.</p>
+                            </div>
+                            <div class="price-box fake-element" onclick="checkFake(this, 'price')">
+                                <span class="old-price">Van € 244,-</span>
+                                <span class="new-price">VOOR € 175,-</span>
+                            </div>
+                            <button class="buy-button">BESTEL NU</button>
+                        </div>
+    
+                        <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=400&q=80" alt="Galaxy Watch Ultra">
+                            <h3>Galaxy Watch Ultra (2025)</h3>
+                            <div class="product-description">
+                                <p>Robuust en krasvrij dankzij titanium horlogekast.</p>
+                                <p>Meer inzicht in je data dankzij AI.</p>
+                                <p class="fake-element" onclick="checkFake(this, 'price')">2 tot 3 dagen batterijduur.</p>
+                            </div>
+                            <div class="price-box fake-element" onclick="checkFake(this, 'price')">
+                                <span class="old-price">Van € 449,-</span>
+                                <span class="new-price">VOOR € 325,-</span>
+                            </div>
+                            <button class="buy-button">BESTEL NU</button>
+                        </div>
+    
+                         <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1615902916751-b63805b4c095?auto=format&fit=crop&w=400&q=80" alt="Galaxy Watch Classic">
+                            <h3>Galaxy Watch 8 Classic</h3>
+                            <div class="product-description">
+                                <p class="fake-element" onclick="checkFake(this, 'grammar')">Met de draaiende ring scrol je gemakkelijk door apps.</p>
+                                <p>Meer inzicht in je data dankzij AI.</p>
+                            </div>
+                            <div class="price-box fake-element" onclick="checkFake(this, 'price')">
+                                <span class="old-price">Van € 319,-</span>
+                                <span class="new-price">VOOR € 229,-</span>
+                            </div>
+                            <button class="buy-button">BESTEL NU</button>
+                        </div>
+    
+                         <div class="product-card">
+                            <img src="https://images.unsplash.com/photo-1570514806059-4d6d63493010?auto=format&fit=crop&w=400&q=80" alt="Galaxy Watch Standard">
+                            <h3>Galaxy Watch 8</h3>
+                            <div class="product-description">
+                                <p class="fake-element" onclick="checkFake(this, 'grammar')">Lichtgewicht ontwerp dankzij de aluminium kast.</p>
+                                <p>Meer inzicht in je data dankzij AI.</p>
+                            </div>
+                            <div class="price-box fake-element" onclick="checkFake(this, 'price')">
+                                <span class="old-price">Van € 249,-</span>
+                                <span class="new-price">VOOR € 179,-</span>
+                            </div>
+                            <button class="buy-button">BESTEL NU</button>
+                        </div>
+                    </div>
+    
+                    <div style="background: #333; color: #aaa; padding: 30px 20px; text-align: center; font-size: 12px; margin-top: 20px;">
+                        <p style="margin-bottom: 10px;">© 2026 SmartWatch Voordeel B.V. - Alle rechten voorbehouden.</p>
+                        <p>Algemene Voorwaarden | Privacybeleid | Klantenservice</p>
+                        <p class="fake-element" onclick="checkFake(this, 'trust')">
+                            KVK: 123456789 | BTW: NL000099999B01
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <div id="feedback-box"></div>
+    
+            <div class="modal-buttons margin-bottom-buttons" style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+                <button class="cancel-btn" onclick="closeModal()">Stoppen</button>
+                <button class="save-btn" onclick="finishWebsiteGame()" id="finish-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Doorgaan (vind er minstens 3)</button>
+            </div>
         </div>
     </div>
 

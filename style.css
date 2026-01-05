@@ -95,6 +95,30 @@ img.slide {
     transition: background-color 0.3s ease;
 }
 
+.blinking-circle-2 {
+    position: absolute;
+    
+    /* Positie relatief aan het plaatje */
+    top: 45.5%;
+    left: 38.5%;
+    width: 4.5%;
+    height: 10%;
+    
+    border: 7px solid red;
+    border-radius: 10px;
+
+    /* Centreren + Rotatie */
+    transform: translate(-50%, -50%) rotate(18deg); 
+
+    pointer-events: auto; /* Zorgt dat je erop kunt klikken/hoveren */
+    cursor: pointer;
+    
+    animation: blink 1s infinite alternate;
+    z-index: 20;
+    
+    transition: background-color 0.3s ease;
+}
+
 .blinking-circle:hover {
     background-color: rgba(255, 0, 0, 0.288);
 }
@@ -345,4 +369,281 @@ img.slide {
 
 #paste-warning-modal .warning-btn:hover {
     background-color: #cc8800;
+}
+
+/* =========================================
+   8. SPECIFIEK: FAKE WEBSITE MODAL (FULLSCREEN)
+   ========================================= */
+
+/* Dit overschrijft de standaard .modal-content regels alleen voor deze ID */
+#website-modal .modal-content {
+    width: 100vw;       /* Volledige breedte van het scherm */
+    height: 100vh;      /* Volledige hoogte van het scherm */
+    max-width: 100%;    /* Verwijder de limiet van 400px */
+    border-radius: 0;   /* Geen ronde hoeken meer */
+    border: none;       /* Geen rand nodig bij fullscreen */
+    margin: 0;          /* Geen marges */
+    padding: 40px;      /* Ruimte aan de binnenkant */
+    
+    /* Flexbox zorgt dat de knoppen altijd onderaan staan */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Zorg dat de code-box (het middelste deel) de ruimte vult */
+#website-modal .modal-content > div[style*="background"] {
+    flex: 1;            /* Groeit om de lege ruimte te vullen */
+    overflow-y: auto;   /* Scrollbar als de fake site te lang is */
+    margin-bottom: 20px;
+    background-color: #fff !important; /* Maak de achtergrond wit voor de fake site look */
+    color: #000;        /* Zwarte tekst */
+}
+
+/* Specifieke stijl voor de header in de fake website modal */
+#website-modal h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    margin-top: 40px;
+}
+
+.margin-bottom-buttons{
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+/* --- STIJLING VOOR DE NEP CHROME BROWSER --- */
+.browser-window {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid #dcdcdc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: left;
+    max-width: 100%;
+    margin-top: 20px;
+    height: 600px; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+    position: relative;
+}
+
+.browser-header {
+    background: #dee1e6;
+    padding: 8px 8px 0 8px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 500;
+    position: relative;
+}
+
+.tab-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.tab {
+    background: #fff;
+    padding: 8px 15px;
+    border-radius: 10px 10px 0 0;
+    font-size: 12px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    width: 200px;
+    box-shadow: 0 -1px 1px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 2;
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 6px;
+    border-bottom: 1px solid #f1f3f4;
+    position: relative;
+    z-index: 1;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 12px;
+    padding: 0 15px 0 10px;
+    color: #5f6368;
+    font-size: 16px;
+    cursor: default;
+}
+
+.address-bar {
+    flex-grow: 1;
+    background: #f1f3f4;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #202124;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+    gap: 0; /* Zorgt dat de blokken elkaar raken */
+}
+
+/* --- STIJLING VOOR DE GAME ELEMENTEN --- */
+.fake-element {
+    position: relative;
+    border: 2px dashed transparent;
+    transition: 0.3s;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fake-element.found {
+    border: 2px solid #e74c3c;
+    background: rgba(231, 76, 60, 0.1);
+    cursor: default;
+    z-index: 10; 
+}
+
+/* AANGEPAST: Marges en padding strak getrokken */
+.url-part {
+    display: inline-flex;
+    align-items: center;
+    margin: 0; /* Geen ruimte tussen blokken */
+}
+
+/* Specifieke padding om de tekst naadloos te laten lijken */
+.url-part-left {
+    padding: 4px 0 4px 6px; /* Geen padding rechts */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.url-part-right {
+    padding: 4px 6px 4px 0; /* Geen padding links */
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* --- INHOUD VAN DE NEP WEBSITE --- */
+.web-content {
+    padding: 0;
+    position: relative;
+    font-family: Arial, sans-serif;
+    overflow-y: auto;
+    flex-grow: 1;
+    z-index: 1;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #111, #333);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.urgent-banner {
+    background: #c0392b;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+}
+
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px;
+    justify-content: center;
+    background: #f9f9f9;
+    position: relative;
+    z-index: 1;
+}
+
+.product-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 20px;
+    text-align: center;
+    flex: 1 1 280px; 
+    max-width: 320px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background: #fff; 
+    margin-bottom: 15px;
+}
+
+.product-card h3 { font-size: 1.2em; margin: 10px 0; }
+
+.product-description {
+    font-size: 0.9em;
+    color: #555;
+    text-align: left;
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.product-description p {
+    margin: 5px 0;
+    display: flex;
+    align-items: flex-start;
+}
+
+.product-description p::before {
+    content: "•";
+    color: #27ae60;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.price-box { margin: 15px 0; cursor: pointer; position: relative; padding: 5px; }
+.old-price { text-decoration: line-through; color: #999; font-size: 14px;}
+.new-price { color: #e74c3c; font-weight: bold; font-size: 1.4em; display: block;}
+
+.buy-button {
+    background: #27ae60;
+    color:white;
+    border:none;
+    padding:12px;
+    width:100%;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#feedback-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e3f2fd;
+    border-left: 5px solid #2196f3;
+    color: #0d47a1;
+    border-radius: 4px;
+    display: none;
+    font-size: 14px;
+    text-align: left;
 }
