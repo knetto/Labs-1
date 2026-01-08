@@ -123,11 +123,11 @@
             "\"Geen clickbait meer voor mij. Ik ga bronnen checken voor ik iets deel.\"",
             "Drie klanten, drie mysteries opgelost. De stad is weer een stukje digitaal veiliger."
         ],
-        // Slide 12 (11) - EINDE
+        // Slide 13
         [
-            "Mark haalde opgeawdk waar ik op moet letten.\"",
-            "\"Geen clickbait meer vdwan checken voor ik iets deel.\"",
-            "Drie klanteawdawdwadawdawal veiliger."
+            "Ik sluit mijn laptop af. Het was een productieve dag.",
+            "Het digitale speurwerk zit er weer op voor vandaag.",
+            "Tot de volgende keer, detective!"
         ]
     ];
 
@@ -342,6 +342,8 @@
     // ==========================================
 
     window.checkFake = function(element, type) {
+        // --- ANTI SPAM CHECK ---
+        if (checkSpamProtection()) return; 
         
         // 1. Markeer het element ALTIJD als gevonden (visueel rood)
         if (!element.classList.contains('found')) {
@@ -419,16 +421,14 @@
     }
 
 
-
-
-
-
-// ==========================================
+    // ==========================================
     // 8. LEVEL 3 LOGICA: FAKE NEWS
     // ==========================================
 
-    // AANGEPAST: checkNews functie
     window.checkNews = function(element, type, reason) {
+        // --- ANTI SPAM CHECK ---
+        if (checkSpamProtection()) return;
+
         const feedbackBox = document.getElementById('news-feedback-box');
         
         // Als al gevonden of geklikt, stop
@@ -502,14 +502,13 @@
         btn.style.opacity = '0.5';
         btn.innerText = "Doorgaan (Vind er 5)";
 
-        const cards = document.querySelectorAll('.news-card');
+        const cards = document.querySelectorAll('.news-tile');
         cards.forEach(c => {
             c.classList.remove('found-fake');
             c.classList.remove('checked-real');
         });
     }
-    // ... rest van de finish functies blijven hetzelfde ...
-
+    
     window.finishNewsGame = function() {
         newsModal.style.display = 'none';
         newsSuccessModal.style.display = 'flex';
@@ -522,16 +521,6 @@
         changeSlide(1); 
     }
 
-
-
-
-
-
-
-
-
-    
-
     // ==========================================
     // 9. EVENTS
     // ==========================================
@@ -542,6 +531,7 @@
             else if (passwordSuccessModal.style.display === 'flex') finishPasswordLevel();
             else if (websiteSuccessModal.style.display === 'flex') finishWebsiteLevel();
             else if (newsSuccessModal.style.display === 'flex') finishNewsLevel();
+            else if (document.getElementById('anti-cheat-modal').style.display === 'flex') closeAntiCheat();
             else if (isModalOpen) closeModal();
             return;
         }
@@ -550,5 +540,49 @@
             if (event.key === 'ArrowLeft') handlePrev();
         }
     });
+
+    // ==========================================
+    // 10. ANTI-SPAM BEVEILIGING
+    // ==========================================
+
+    let spamClickCount = 0;
+    let lastClickTimestamp = 0;
+    const SPAM_THRESHOLD_MS = 600; // Als je sneller klikt dan 0.6 seconde
+    const MAX_SPAM_CLICKS = 3;     // Na 3 snelle klikken grijpen we in
+
+    window.closeAntiCheat = function() {
+        document.getElementById('anti-cheat-modal').style.display = 'none';
+        spamClickCount = 0; // Reset de teller
+    }
+
+    // Deze functie wordt aangeroepen bij elke klik in de games
+    window.checkSpamProtection = function() {
+        const now = Date.now();
+        
+        // Als het verschil tussen nu en de vorige klik heel klein is
+        if (now - lastClickTimestamp < SPAM_THRESHOLD_MS) {
+            spamClickCount++;
+        } else {
+            // Als de leerling even wacht, resetten we de teller (braaf gedrag)
+            spamClickCount = 0; 
+        }
+
+        lastClickTimestamp = now;
+
+        // Als ze te vaak snel achter elkaar klikken
+        if (spamClickCount >= MAX_SPAM_CLICKS) {
+            document.getElementById('anti-cheat-modal').style.display = 'flex';
+            spamClickCount = 0; // Reset om te voorkomen dat hij blijft hangen
+            return true; // We geven 'true' terug: JA, er is gespamad
+        }
+
+        return false; // Nee, veilig
+    }
+
+    // Voor Game 2 (Website) - Vangt klikken op de achtergrond op
+    window.trackGlobalSpam = function() {
+        // We voeren alleen de check uit, we doen verder niets met de klik
+        checkSpamProtection();
+    }
 
 })();
