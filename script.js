@@ -249,6 +249,16 @@
         }
     }
 
+    const handlePasteWarning = function(e) {
+        e.preventDefault(); // Zorgt dat de tekst NIET geplakt wordt
+        document.getElementById('paste-warning-modal').style.display = 'flex'; // Toont de popup
+    }
+
+    // 2. Koppel dit ALLEEN aan het tweede veld (bevestigen)
+    if (passInput2) {
+        passInput2.addEventListener('paste', handlePasteWarning);
+    }
+
     window.checkPassword = function() {
         const p1 = passInput1.value;
         const p2 = passInput2.value;
