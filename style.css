@@ -401,13 +401,13 @@ img.slide {
 
 /* Dit overschrijft de standaard .modal-content regels alleen voor deze ID */
 #website-modal .modal-content {
-    width: 100vw;       /* Volledige breedte van het scherm */
-    height: 100vh;      /* Volledige hoogte van het scherm */
-    max-width: 100%;    /* Verwijder de limiet van 400px */
-    border-radius: 0;   /* Geen ronde hoeken meer */
-    border: none;       /* Geen rand nodig bij fullscreen */
-    margin: 0;          /* Geen marges */
-    padding: 40px;      /* Ruimte aan de binnenkant */
+    width: 100vw;        /* Volledige breedte van het scherm */
+    height: 100vh;       /* Volledige hoogte van het scherm */
+    max-width: 100%;     /* Verwijder de limiet van 400px */
+    border-radius: 0;    /* Geen ronde hoeken meer */
+    border: none;        /* Geen rand nodig bij fullscreen */
+    margin: 0;           /* Geen marges */
+    padding: 40px;       /* Ruimte aan de binnenkant */
     
     /* Flexbox zorgt dat de knoppen altijd onderaan staan */
     display: flex;
@@ -453,7 +453,7 @@ img.slide {
     text-align: left;
     max-width: 100%;
     margin-top: 20px;
-    height: 600px; 
+    height: 1200px; 
     display: flex;
     flex-direction: column;
     overflow: hidden; 

@@ -26,10 +26,7 @@
 
     // Scores
     let foundTypes = []; 
-    let websiteScore = 0; 
     let newsScore = 0;
-     // AANGEPAST: Variabele bovenin het script
-     const totalFakeNews = 5; // Er zijn nu 5 fakes om te vinden
 
     // Status
     let currentSlide = 0;
@@ -124,8 +121,13 @@
         [
             "Mark haalde opgelucht adem. \"Bedankt! Nu snap ik waar ik op moet letten.\"",
             "\"Geen clickbait meer voor mij. Ik ga bronnen checken voor ik iets deel.\"",
-            "Drie klanten, drie mysteries opgelost. De stad is weer een stukje digitaal veiliger.",
-            "EINDE VERHAAL."
+            "Drie klanten, drie mysteries opgelost. De stad is weer een stukje digitaal veiliger."
+        ],
+        // Slide 12 (11) - EINDE
+        [
+            "Mark haalde opgeawdk waar ik op moet letten.\"",
+            "\"Geen clickbait meer vdwan checken voor ik iets deel.\"",
+            "Drie klanteawdawdwadawdawal veiliger."
         ]
     ];
 
@@ -233,89 +235,177 @@
     window.closePasteWarning = function() { pasteWarningModal.style.display = 'none'; }
 
     // ==========================================
-    // 6. GAME 1: PASSWORD
+    // 6. LEVEL 1 LOGICA (PASSWORD)
     // ==========================================
-    // ... bestaande functies (togglePassword, checkPassword, finishPasswordLevel) ...
-    window.togglePassword = function(id, icon) {
-        const input = document.getElementById(id);
-        if (input.type === "password") { input.type = "text"; icon.textContent = "🙈"; }
-        else { input.type = "password"; icon.textContent = "👁️"; }
+
+    window.togglePassword = function(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            iconElement.textContent = "🙈"; 
+        } else {
+            input.type = "password";
+            iconElement.textContent = "👁️";
+        }
     }
 
     window.checkPassword = function() {
         const p1 = passInput1.value;
         const p2 = passInput2.value;
         let errors = [];
-        
-        // Simpele checks voor voorbeeld
-        if (p1.toLowerCase().includes("karen")) { warningModal.style.display = 'flex'; return; }
-        if (p1.length < 12) errors.push("Te kort (minimaal 12 tekens).");
-        if (p1 !== p2) errors.push("Wachtwoorden niet gelijk.");
 
+        const forbiddenSequences = ["01234567890", "09876543210", "abcdefghijklmnopqrstuvwxyz", "qwertyuiop", "asdfghjkl", "zxcvbnm"];
+        const commonWeakWords = ["welkom", "wachtwoord", "password", "geheim", "admin", "login", "flappie", "hallo", "voetbal", "123456"];
+
+        // Karen check
+        if (p1.toLowerCase().includes("karen")) {
+            warningModal.style.display = 'flex';
+            return; 
+        }
+
+        // Zwakke woorden check
+        let foundWeakWord = false;
+        const lowerP1 = p1.toLowerCase();
+        for (let word of commonWeakWords) {
+            if (lowerP1.includes(word)) {
+                foundWeakWord = word;
+                break;
+            }
+        }
+        if (foundWeakWord) {
+            errors.push("Gebruik geen veelvoorkomende woorden (zoals '" + foundWeakWord + "').");
+        }
+
+        // Eisen check
+        if (p1.length < 12) errors.push("Te kort (minimaal 12 tekens nodig).");
+        if (!/[A-Z]/.test(p1)) errors.push("Voeg een Hoofdletter toe.");
+        if (!/[0-9]/.test(p1)) errors.push("Voeg een cijfer toe.");
+        if (!/[^a-zA-Z0-9]/.test(p1)) errors.push("Voeg een leesteken toe.");
+        
+        // Patronen check
+        let foundPattern = false;
+        for (let seq of forbiddenSequences) {
+            for (let i = 0; i < seq.length - 3; i++) {
+                if (lowerP1.includes(seq.substring(i, i + 4))) { 
+                    foundPattern = true; break; 
+                }
+            }
+            if (foundPattern) break;
+        }
+        if (foundPattern) errors.push("Gebruik geen logische reeksen (1234, abcd).");
+
+        // Gelijkheid check
+        if (p1 !== p2) {
+            errors.push("De wachtwoorden zijn niet gelijk.");
+        } else if (p1.length > 0 && p2.length === 0) {
+            errors.push("Vul het wachtwoord ook in bij bevestiging.");
+        }
+
+        // Resultaat verwerking
         if (errors.length > 0) {
             errorBox.style.display = 'block';
-            errorBox.innerHTML = errors.join("<br>");
+            let html = "<strong>Let op:</strong><ul>";
+            errors.forEach(err => html += "<li>" + err + "</li>");
+            html += "</ul>";
+            errorBox.innerHTML = html;
         } else {
+            // GOED GEKEURD! 
+            // 1. Verberg invoer modal
             passwordModal.style.display = 'none';
+            // 2. Toon succes modal met tips
             passwordSuccessModal.style.display = 'flex';
+            
+            // We gaan nog NIET naar de volgende slide, dat doet de knop in de succes modal.
         }
     }
 
+    // Aangeroepen door de knop in de succes-modal
     window.finishPasswordLevel = function() {
         passwordSuccessModal.style.display = 'none';
         isModalOpen = false;
         level1Unlocked = true;
-        changeSlide(1);
+        changeSlide(1); // Ga naar slide 5
     }
 
     // ==========================================
-    // 7. GAME 2: WEBSITE
+    // 7. LEVEL 2 LOGICA (FAKE WEBSITE)
     // ==========================================
-    // ... bestaande functies (checkFake, resetWebsiteGame, finishWebsiteLevel) ...
+
     window.checkFake = function(element, type) {
+        
+        // 1. Markeer het element ALTIJD als gevonden (visueel rood)
         if (!element.classList.contains('found')) {
             element.classList.add('found');
         }
-        const fb = document.getElementById('feedback-box');
-        fb.style.display = 'block';
-        
+
+        // 2. Bepaal de uitleg tekst
+        let explanation = "";
+        switch(type) {
+            case 'protocol':
+                explanation = "De verbinding is niet veilig ('http' in plaats van 'https') en de browser waarschuwt hiervoor. Vul nooit gegevens in op zo'n site!";
+                break;
+            case 'domain':
+                explanation = "Kijk goed naar het webadres. '.xyz' is een goedkope extensie die vaak door oplichters wordt gebruikt. Ook is de naam erg lang en generiek.";
+                break;
+            case 'urgency':
+                explanation = "Dit heet 'nep-urgentie'. Oplichters gebruiken een aflopende klok om stress te creëren. Ze willen dat je stopt met kritisch nadenken en snel betaalt.";
+                break;
+            case 'grammar':
+                explanation = "Je hebt een taalfout gevonden (zoals d/t-fouten of kromme zinnen). Professionele winkels hebben dit zelden.";
+                break;
+            case 'price':
+                explanation = "De korting is verdacht. Hoge kortingen (30%+) op gloednieuwe producten zijn vaak te mooi om waar te zijn.";
+                break;
+             case 'trust':
+                explanation = "Bedrijfsgegevens onderaan de pagina (zoals KVK nummers) zijn op nepsites vaak verzonnen of gestolen van andere bedrijven.";
+                break;
+        }
+
+        const feedbackBox = document.getElementById('feedback-box');
+        feedbackBox.style.display = 'block';
+
+        // 3. Check of dit TYPE fout al eerder gevonden is
         if (foundTypes.includes(type)) {
-            fb.innerText = "Die had je al! (Type: " + type + ")";
+            // TYPE AL GEVONDEN: Geen punten erbij, wel uitleg tonen
+            feedbackBox.innerText = "Dat klopt ook! Dit is dezelfde soort fout (" + type + ") als je al eerder vond. \n\n" + explanation;
         } else {
+            // NIEUW TYPE: Punten erbij!
             foundTypes.push(type);
-            websiteScore++;
-            document.getElementById('score').innerText = websiteScore;
-            fb.innerText = "Goed gevonden! Dit is verdacht.";
+            score++;
+            document.getElementById('score').innerText = score;
+            feedbackBox.innerText = "Scherp gezien! " + explanation;
             
-            if (websiteScore >= 6) {
+            // Win conditie: 6 unieke types
+            if (score >= 6) {
                 const btn = document.getElementById('finish-btn');
                 btn.disabled = false;
                 btn.style.opacity = '1';
                 btn.style.cursor = 'pointer';
                 btn.innerText = "Doorgaan (Level Gehaald)";
+                
+                feedbackBox.innerText += "\n\nFantastisch! Je hebt alle 6 de signalen gevonden en de fake website ontmaskerd.";
             }
         }
     }
 
+    // Reset functie voor level 2
     window.resetWebsiteGame = function() {
-        websiteScore = 0; foundTypes = [];
+        score = 0;
+        foundTypes = []; 
         document.getElementById('score').innerText = '0';
         document.getElementById('feedback-box').style.display = 'none';
-        const btn = document.getElementById('finish-btn');
-        btn.disabled = true; btn.style.opacity = '0.5';
-        document.querySelectorAll('.fake-element.found').forEach(el => el.classList.remove('found'));
+        document.getElementById('finish-btn').disabled = true;
+        document.getElementById('finish-btn').style.opacity = '0.5';
+        document.getElementById('finish-btn').innerText = "Doorgaan (vind ze alle 6)";
+        const foundElements = document.querySelectorAll('.fake-element.found');
+        foundElements.forEach(el => el.classList.remove('found'));
     }
 
     window.finishWebsiteGame = function() {
         websiteModal.style.display = 'none';
-        websiteSuccessModal.style.display = 'flex';
-    }
-
-    window.finishWebsiteLevel = function() {
-        websiteSuccessModal.style.display = 'none';
         isModalOpen = false;
         level2Unlocked = true;
-        changeSlide(1);
+        changeSlide(1); // Ga naar slide 9
     }
 
 
