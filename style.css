@@ -1102,14 +1102,14 @@ img.slide {
 .blinking-circle-5 {
     position: absolute;
     /* Pas deze waardes aan zodat hij mooi op het telefoonscherm in de afbeelding valt */
-    top: 55%;  
-    left: 50%;
-    width: 15%;
+    top: 45.5%;  
+    left: 39%;
+    width: 5%;
     height: 10%;
     
     border: 7px solid red;
     border-radius: 10px;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%) rotate(15deg);
     
     pointer-events: auto;
     cursor: pointer;
