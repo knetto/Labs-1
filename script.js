@@ -16,6 +16,9 @@
     const newsModal = document.getElementById('news-modal');
     const newsSuccessModal = document.getElementById('news-success-modal');
 
+    // Nieuwe modals voor AI game (kun je later koppelen)
+    // const aiModal = document.getElementById('ai-modal'); 
+    
     const warningModal = document.getElementById('warning-modal');
     const pasteWarningModal = document.getElementById('paste-warning-modal');
 
@@ -37,6 +40,7 @@
     let level1Unlocked = false; 
     let level2Unlocked = false; 
     let level3Unlocked = false; 
+    let level4Unlocked = false;
 
 
     // ==========================================
@@ -117,18 +121,41 @@
             "\"Kunt u me helpen mijn feed op te schonen?\"",
             "Klik op de rode cirkel op het scherm om de nepberichten te filteren."
         ],
-        // Slide 12 (11) - EINDE
+        // Slide 12 (11)
         [
             "Mark haalde opgelucht adem. \"Bedankt! Nu snap ik waar ik op moet letten.\"",
             "\"Geen clickbait meer voor mij. Ik ga bronnen checken voor ik iets deel.\"",
             "Drie klanten, drie mysteries opgelost. De stad is weer een stukje digitaal veiliger."
         ],
-        // Slide 13
+        // Slide 13 (12) - NIEUWE KLANT
         [
-            "Ik sluit mijn laptop af. Het was een productieve dag.",
-            "Het digitale speurwerk zit er weer op voor vandaag.",
-            "Tot de volgende keer, detective!"
+            "Mark was nog maar net de deur uit of er klopte alweer iemand aan.",
+            "Een jonge gozer, petje diep over zijn ogen getrokken, slenterde naar binnen.",
+            "Hij plofte neer en zag eruit alsof zijn hart zojuist digitaal gebroken was.",
+            "\"Ben jij de detective? Ik heb een... nogal gênant probleem.\""
+        ],
+        // Slide 14 (13) - PROBLEEM UITLEGGEN
+        [
+            "\"Ik dacht dat ik de liefde van mijn leven had gevonden,\" begon hij zachtjes.",
+            "\"Sophie. Ze was prachtig, grappig... perfect. We appten wekenlang via die dating app.\"",
+            "\"Maar elke keer als ik wilde videobellen, was haar camera 'stuk'. Gisteren kwam ik erachter...\"",
+            "\"Sophie bestaat niet. Haar foto's waren nep. Het was een AI-gegenereerd profiel. Ik ben gecatfished.\""
+        ],
+        // Slide 15 (14) - GAME 4 TRIGGER
+        [
+            "\"Dat is balen, jongen. Maar je bent niet de enige. AI-afbeeldingen worden steeds realistischer.\"",
+            "\"Toch maken ze foutjes. Handen met zes vingers, vreemde wazige achtergronden of perfecte symmetrie.\"",
+            "\"Laten we kijken of we samen de AI-fouten kunnen spotten, zodat je dit in de toekomst herkent.\"",
+            "Klik op de rode cirkel op het scherm om de AI-training te starten."
+        ],
+        // Slide 16 (15) - EINDE VERHAAL
+        [
+            "\"Ik voel me nog steeds stom, maar nu weet ik tenminste waar ik op moet letten,\" zei hij bij het weggaan.",
+            "\"Geen nep-profielen meer voor mij. Ik ga weer echte mensen ontmoeten in de echte wereld.\"",
+            "Vier zaken opgelost. Mijn koffie is koud, maar de stad is veilig.",
+            "Tijd om naar huis te gaan. Case closed."
         ]
+        
     ];
 
     // Start
@@ -165,13 +192,22 @@
     }
 
     // ==========================================
-    // 4. LOCKS
+    // 4. LOCKS (AANGEPAST)
     // ==========================================
 
     function changeSlide(direction) {
+        // Lock 1: Wachtwoord (Slide 4 is index 3)
         if (currentSlide === 3 && direction === 1 && !level1Unlocked) return;
+        
+        // Lock 2: Website (Slide 8 is index 7)
         if (currentSlide === 7 && direction === 1 && !level2Unlocked) return;
-        if (currentSlide === 10 && direction === 1 && !level3Unlocked) return; // LOCK Level 3
+        
+        // Lock 3: Nieuws (Slide 11 is index 10)
+        if (currentSlide === 10 && direction === 1 && !level3Unlocked) return;
+
+        // Lock 4: AI Game (Slide 15 is index 14)
+        // HIER ZAT DE FOUT: Het moet 14 zijn, niet 15.
+        if (currentSlide === 14 && direction === 1 && !level4Unlocked) return; 
 
         let newIndex = currentSlide + direction;
         if (newIndex < 0 || newIndex >= slides.length) return;
@@ -584,5 +620,398 @@
         // We voeren alleen de check uit, we doen verder niets met de klik
         checkSpamProtection();
     }
+    
+    // ==========================================
+    // 11. DEBUG / CHEAT FUNCTIE (Backtick `)
+    // ==========================================
+    
+    let cheatStep = 0;
+
+    document.addEventListener('keydown', function(event) {
+        // Controleer op de backtick toets (`), soms ook 'Backquote' genoemd
+        if (event.key === '`' || event.code === 'Backquote') {
+            
+            cheatStep++;
+            console.log("Cheat activated: Step " + cheatStep);
+
+            // Sluit eerst alle modals als die open staan
+            if (isModalOpen) closeModal();
+            if (document.getElementById('anti-cheat-modal').style.display === 'flex') closeAntiCheat();
+
+            // Verwijder huidige actieve slide class
+            slides[currentSlide].classList.remove('active');
+
+            if (cheatStep === 1) {
+                // LEVEL 1 COMPLETED
+                level1Unlocked = true;
+                currentSlide = 5; // Spring naar slide na password game
+                alert("👨‍💻 Cheat: Level 1 (Wachtwoord) voltooid!");
+            } 
+            else if (cheatStep === 2) {
+                // LEVEL 2 COMPLETED
+                level2Unlocked = true;
+                currentSlide = 9; // Spring naar slide na website game
+                alert("👨‍💻 Cheat: Level 2 (Website) voltooid!");
+            } 
+            else if (cheatStep === 3) {
+                // LEVEL 3 COMPLETED
+                level3Unlocked = true;
+                currentSlide = 12; // Spring naar het einde
+                alert("👨‍💻 Cheat: Level 3 (Nieuws) voltooid!");
+            }
+            else if (cheatStep === 4) {
+                // LEVEL 4 COMPLETED
+                level4Unlocked = true;
+                currentSlide = 15; // Spring naar het einde
+                alert("👨‍💻 Cheat: Level 4 (Nieuws) voltooid!");
+            }
+
+            // Update de UI naar de nieuwe slide
+            slides[currentSlide].classList.add('active');
+            currentLine = 0;
+            updateDialogue();
+            updateUI();
+        }
+    });
+
+// ==========================================
+    // 12. GAME 4 LOGICA: AI DETECTIE
+    // ==========================================
+
+    // Deel 1: Makkelijk (Links vs Rechts)
+    const aiPart1 = [
+        { 
+            real: "img/ai/1-real.jpeg", ai: "img/ai/1-fake.jpeg", aiSide: 'left', 
+            feedback: "Focus op de details: de tanden lijken één massief blok." 
+        },
+        { 
+            real: "img/ai/2-real.jpeg", ai: "img/ai/2-fake.jpeg", aiSide: 'right', 
+            feedback: "Kijk goed naar de haarlijn. De overgang is te abrupt." 
+        },
+        { 
+            real: "img/ai/3-real.jpeg", ai: "img/ai/3-fake.jpeg", aiSide: 'right', 
+            feedback: "De achtergrond is een onlogische wazige vlek." 
+        },
+        { 
+            real: "img/ai/4-real.jpeg", ai: "img/ai/4-fake.jpeg", aiSide: 'left', 
+            feedback: "Zoom in op het haar rechtsonder; de haarpunten vervagen vreemd." 
+        },
+        { 
+            real: "img/ai/5-real.jpeg", ai: "img/ai/5-fake.jpeg", aiSide: 'left', 
+            feedback: "De stof bij de kraag loopt niet logisch door." 
+        },
+        { 
+            real: "img/ai/6-real.jpeg", ai: "img/ai/6-fake.jpeg", aiSide: 'right', 
+            feedback: "De textuur bovenop het hoofd lijkt op plastic." 
+        },
+        { 
+            real: "img/ai/7-real.jpeg", ai: "img/ai/7-fake.jpeg", aiSide: 'left', 
+            feedback: "De brilmontuur verdwijnt in het niets achter het oor." 
+        },
+        { 
+            real: "img/ai/8-real.jpeg", ai: "img/ai/8-fake.jpeg", aiSide: 'right', 
+            feedback: "De oorbellen zijn ongelijk (niet symmetrisch)." 
+        },
+        { 
+            real: "img/ai/9-real.jpeg", ai: "img/ai/9-fake.jpeg", aiSide: 'left', 
+            feedback: "De anatomie van het oor klopt niet (vreemde vouwen)." 
+        },
+        { 
+            real: "img/ai/10-real.jpeg", ai: "img/ai/10-fake.jpeg", aiSide: 'right', 
+            feedback: "Klassieke fout: de hand heeft een vreemde vorm/vingers." 
+        },
+        { 
+            real: "img/ai/11-real.jpeg", ai: "img/ai/11-fake.jpeg", aiSide: 'left', 
+            feedback: "Het brilpootje gaat dwars door de huid heen." 
+        },
+        { 
+            real: "img/ai/12-real.jpeg", ai: "img/ai/12-fake.jpeg", aiSide: 'right', 
+            feedback: "Het oor ziet er vervormd en 'gesmolten' uit." 
+        }
+    ];
+
+    // Deel 2: Expert (Met antwoord plaatje)
+    const aiPart2 = [
+        { 
+            real: "img/ai2/real1.png", ai: "img/ai2/fake1.png", 
+            answer: "img/ai2/1antwoord.png", aiSide: 'left',
+            feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
+        },
+        { 
+            real: "img/ai2/real2.png", ai: "img/ai2/fake2.png", 
+            answer: "img/ai2/2antwoord.png", aiSide: 'right',
+            feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
+        },
+        { 
+            real: "img/ai2/real3.png", ai: "img/ai2/fake3.png", 
+            answer: "img/ai2/3antwoord.png", aiSide: 'left',
+            feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
+        },
+        { 
+            real: "img/ai2/real4.jpeg", ai: "img/ai2/fake4.jpeg", 
+            answer: "img/ai2/4antwoord.png", aiSide: 'right',
+            feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
+        },
+        { 
+            real: "img/ai2/real5.jpeg", ai: "img/ai2/fake5.jpeg", 
+            answer: "img/ai2/5antwoord.png", aiSide: 'left',
+            feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
+        }
+    ];
+
+    // Status Variabelen
+    let currentPart = 1;      
+    let currentAIRound = 0;   
+    let aiProcessing = false; 
+
+    // --- 2. START / RESET ---
+    window.resetAIGame = function() {
+        currentPart = 1;
+        currentAIRound = 0;
+        aiProcessing = false;
+        
+        // Reset UI
+        document.getElementById('ai-title').innerText = "AI of Echt?";
+        document.getElementById('ai-title').style.color = "#fff";
+        document.getElementById('ai-level-indicator').style.display = "none";
+        
+        document.getElementById('ai-feedback-box').style.display = 'none';
+        document.getElementById('ai-finish-btn').style.display = 'none';
+        document.getElementById('ai-next-btn').style.display = 'none';
+        
+        // Zorg dat de view goed staat (Game zichtbaar, Expert view verborgen)
+        document.getElementById('ai-game-view').style.display = 'flex';
+        document.getElementById('ai-expert-view').style.display = 'none';
+        
+        loadAIRound();
+    }
+
+    // --- 3. LOAD ROUND ---
+    function loadAIRound() {
+        const data = (currentPart === 1) ? aiPart1[currentAIRound] : aiPart2[currentAIRound];
+        
+        // Update ronde teller
+        const total = (currentPart === 1) ? aiPart1.length : aiPart2.length;
+        document.getElementById('ai-round').innerText = (currentAIRound + 1) + "/" + total;
+        
+        // Elementen
+        const leftImg = document.getElementById('img-left');
+        const rightImg = document.getElementById('img-right');
+        const leftBox = document.getElementById('ai-option-left');
+        const rightBox = document.getElementById('ai-option-right');
+
+        // Reset
+        leftBox.className = 'ai-option';
+        rightBox.className = 'ai-option';
+        document.getElementById('ai-feedback-box').style.display = 'none';
+        document.getElementById('ai-next-btn').style.display = 'none'; // Verberg knop bij start ronde
+
+        // Zet afbeeldingen
+        if (data.aiSide === 'left') {
+            leftImg.src = data.ai;
+            rightImg.src = data.real;
+        } else {
+            leftImg.src = data.real;
+            rightImg.src = data.ai;
+        }
+    }
+
+// --- 4. CHECK ANSWER ---
+window.checkAI = function(side) {
+    if (aiProcessing) return;
+    
+    const currentList = (currentPart === 1) ? aiPart1 : aiPart2;
+    if (currentAIRound >= currentList.length) return;
+
+    aiProcessing = true;
+    const data = currentList[currentAIRound];
+    
+    const feedbackBox = document.getElementById('ai-feedback-box');
+    const chosenBox = document.getElementById('ai-option-' + side);
+    const aiBox = document.getElementById('ai-option-' + data.aiSide);
+
+    // Feedback tonen (Goed/Fout)
+    if (side === data.aiSide) {
+        chosenBox.classList.add('correct-choice');
+        feedbackBox.style.display = 'block';
+        feedbackBox.style.background = '#d4edda';
+        feedbackBox.style.color = '#155724';
+        feedbackBox.innerHTML = "<strong>Goed gezien!</strong> " + data.feedback;
+    } else {
+        chosenBox.classList.add('wrong-choice');
+        aiBox.classList.add('correct-choice'); 
+        feedbackBox.style.display = 'block';
+        feedbackBox.style.background = '#f8d7da';
+        feedbackBox.style.color = '#721c24';
+        feedbackBox.innerHTML = "<strong>Helaas.</strong> De andere was AI.<br>" + data.feedback;
+    }
+
+    // --- AANGEPASTE LOGICA: ALTIJD WACHTEN OP KNOP ---
+
+    // Toon ALTIJD de volgende knop (zowel bij Part 1 als Part 2)
+    // We gebruiken een kleine vertraging zodat de gebruiker eerst ziet wat hij klikt
+    setTimeout(function() {
+        document.getElementById('ai-next-btn').style.display = 'inline-block';
+    }, 500);
+
+    
+    if (currentPart === 1) {
+        // PART 1: We doen NIETS speciaals. 
+        // We laten de plaatjes staan (zodat ze de rode/groene randen zien).
+        // De gebruiker moet nu zelf op "Volgende" klikken.
+    } 
+    else {
+        // PART 2 (EXPERT): Hier wisselen we wel van weergave naar het bewijsplaatje
+        setTimeout(function() {
+            // 1. Verberg de Link/Rechts game
+            document.getElementById('ai-game-view').style.display = 'none';
+            
+            // 2. Toon de Expert View met de antwoordfoto
+            const expertView = document.getElementById('ai-expert-view');
+            const expertImg = document.getElementById('ai-expert-img');
+            
+            expertImg.src = data.answer; 
+            expertView.style.display = 'flex';
+            
+        }, 1000); // Korte wacht voor effect
+    }
+}
+
+// --- 5. NEXT ROUND LOGICA ---
+
+// NIEUWE FUNCTIE: Werkt voor zowel Part 1 als Part 2
+window.nextAIRoundHandler = function() {
+    const currentList = (currentPart === 1) ? aiPart1 : aiPart2;
+    nextLogic(currentList);
+}
+
+// Deze functie wordt aangeroepen door de handler hierboven
+function nextLogic(currentList) {
+    currentAIRound++;
+    
+    // Reset Views voor de volgende ronde
+    // Dit is belangrijk: we moeten zeker weten dat de game-view weer zichtbaar is
+    // en de expert-view weg is, ongeacht welk level we spelen.
+    document.getElementById('ai-game-view').style.display = 'flex';
+    document.getElementById('ai-expert-view').style.display = 'none';
+    document.getElementById('ai-next-btn').style.display = 'none';
+
+    if (currentAIRound < currentList.length) {
+        loadAIRound();
+        aiProcessing = false;
+    } else {
+        // Lijst is klaar
+        if (currentPart === 1) {
+            startPart2();
+        } else {
+            gameFinished();
+        }
+    }
+}
+
+    // Functie voor de knop in HTML:
+    window.nextExpertRound = function() {
+        nextLogic(aiPart2);
+    }
+
+    // --- OVERGANG & EINDE ---
+
+    function startPart2() {
+        currentPart = 2;
+        currentAIRound = 0;
+        
+        const title = document.getElementById('ai-title');
+        title.innerText = "LEVEL 2: HARD MODE";
+        title.style.color = "#ff4444"; 
+        
+        document.getElementById('ai-level-indicator').style.display = "inline-block";
+        
+        const fb = document.getElementById('ai-feedback-box');
+        fb.style.display = 'block';
+        fb.style.background = '#333';
+        fb.style.color = '#fff';
+        fb.innerHTML = "<strong>Gefeliciteerd!</strong> Je hebt de basis gehad.<br>Nu wordt het moeilijk. Na elk antwoord zie je het bewijs.";
+        
+        setTimeout(function() {
+            loadAIRound();
+            aiProcessing = false;
+        }, 3500);
+    }
+
+    function gameFinished() {
+        document.getElementById('ai-round').innerText = "VOLTOOID";
+        
+        // Verberg alles behalve feedback en finish knop
+        document.getElementById('ai-game-view').style.display = 'none';
+        document.getElementById('ai-expert-view').style.display = 'none';
+        
+        const fb = document.getElementById('ai-feedback-box');
+        fb.style.display = 'block';
+        fb.innerHTML = "<strong>Training Voltooid!</strong> Je bent nu een echte AI-expert.";
+        fb.style.background = '#cce5ff';
+        fb.style.color = '#004085';
+        
+        const btn = document.getElementById('ai-finish-btn');
+        btn.style.display = 'inline-block';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+    }
+    
+        // 5. Open Modal Uitbreiding
+        // Zorg dat je bestaande openModal functie nu ook 'ai' ondersteunt
+        const originalOpenModal = window.openModal;
+        window.openModal = function(gameType) {
+            if (gameType === 'ai') {
+                resetAIGame();
+                document.getElementById('ai-modal').style.display = 'flex';
+                isModalOpen = true;
+            } else {
+                // Roep de oude logica aan voor password/website/news
+                // (Als je de code hierboven plakt in je script, moet je dit even netjes samenvoegen met je switch statement)
+                // Hieronder hoe het eruit ziet als je het integreert in je BESTAANDE switch:
+                 if (gameType === 'password') {
+                    passwordModal.style.display = 'flex';
+                    passInput1.value = ""; passInput2.value = ""; errorBox.style.display = 'none';
+                    passInput1.type = "password"; passInput2.type = "password";
+                } else if (gameType === 'website') {
+                    resetWebsiteGame();
+                    websiteModal.style.display = 'flex';
+                } else if (gameType === 'news') {
+                    resetNewsGame();
+                    newsModal.style.display = 'flex';
+                }
+                isModalOpen = true;
+            }
+        }
+    
+        // 6. Afronden en Level 4 Unlocken
+        window.finishAIGame = function() {
+            // Sluit game modal
+            document.getElementById('ai-modal').style.display = 'none';
+            // Open succes modal
+            document.getElementById('ai-success-modal').style.display = 'flex';
+        }
+    
+        window.finishAILevel = function() {
+            // Sluit succes modal
+            document.getElementById('ai-success-modal').style.display = 'none';
+            isModalOpen = false;
+    
+            // *** DE BELANGRIJKE LOCK LOGICA ***
+            level4Unlocked = true; // Zet lock open
+            changeSlide(1);        // Ga nu pas naar slide 16
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 })();

@@ -13,32 +13,45 @@
 /* =========================================
    2. SLIDER & AFBEELDINGEN
    ========================================= */
-.slider-container {
+   .slider-container {
     position: relative;
     width: 100%;
     height: 100vh;
     background-color: #000;
-    /* Flexbox zorgt dat alles netjes in het midden staat */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Optioneel: padding zorgt dat afbeeldingen niet tegen de rand plakken op mobiel */
+    padding: 20px; 
+    box-sizing: border-box;
+}
+
+/* Algemene stijl voor elke slide */
+.slide {
+    position: absolute;
+    
+    /* Zorg dat de slide de ruimte vult, maar STOP bij 1024px */
+    width: 100%;
+    height: 100%;
+    max-width: 1024px;
+    max-height: 1024px;
+    
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
+    
+    /* Flexbox hierin zorgt dat img of div inhoud gecentreerd blijft binnen de 1024px box */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Algemene stijl voor elke slide (zowel <img> als <div>) */
-.slide {
-    position: absolute;
-    max-width: 100%;
-    max-height: 100%;
-    opacity: 0; /* Standaard onzichtbaar */
-    transition: opacity 0.5s ease-in-out;
-    z-index: 1;
-}
-
-/* Specifiek voor de simpele afbeeldingen (Slide 1, 2, 3) */
+/* Specifiek voor de afbeeldingen */
 img.slide {
-    width: auto;
-    height: auto;
-    object-fit: contain; /* Zorgt voor de zwarte balken, foto wordt niet uitgerekt */
+    /* De afbeelding moet zich aanpassen aan de .slide container (die max 1024 is) */
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Behoudt vierkant, voegt balken toe indien nodig */
 }
 
 /* Zichtbare slide */
@@ -939,4 +952,143 @@ img.slide {
     z-index: 10;
     font-size: 0.9rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   12. AI GAME STYLING (NIEUW)
+   ========================================= */
+
+/* De cirkel op Slide 15 */
+.blinking-circle-4 {
+    position: absolute;
+    
+    /* Positie relatief aan het plaatje */
+    top: 62%;
+    left: 49%;
+    width: 37.5%;
+    height: 26%;
+    
+    border: 7px solid red;
+    border-radius: 10px;
+
+    /* Centreren + Rotatie */
+    transform: translate(-50%, -50%) rotate(-2deg) skewX(4deg); 
+
+    pointer-events: auto; /* Zorgt dat je erop kunt klikken/hoveren */
+    cursor: pointer;
+    
+    animation: blink 1s infinite alternate;
+    z-index: 20;
+    
+    transition: background-color 0.3s ease;
+}
+
+.blinking-circle-4:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+/* De container voor de twee afbeeldingen */
+.ai-game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex: 1; /* Neemt de rest van de ruimte in */
+    width: 100%;
+    position: relative;
+}
+
+/* De kaartjes waar de foto's in zitten */
+.ai-option {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    max-height: 500px; /* Niet te hoog worden */
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 4px solid transparent; /* Ruimte voor border bij hover/selectie */
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #000;
+}
+
+.ai-option:hover {
+    transform: scale(1.02);
+    border-color: #007bff;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+}
+
+/* De afbeeldingen zelf */
+.ai-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Of 'cover' als je wilt dat het beeldvullend is */
+    display: block;
+}
+
+/* De "VS" tekst in het midden */
+.ai-vs {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #555;
+    font-style: italic;
+}
+
+/* Feedback overlay (Groen vinkje / Rood kruis over de foto) */
+.ai-overlay-feedback {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+    background: rgba(0,0,0,0.6);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+/* Klassen die we met JS toevoegen voor feedback */
+.ai-option.correct-choice {
+    border-color: #27ae60;
+}
+.ai-option.correct-choice .ai-overlay-feedback {
+    opacity: 1;
+    content: "✅"; /* CSS kan geen content in div zetten zonder ::after, we doen dit in JS of hieronder */
+}
+.ai-option.correct-choice .ai-overlay-feedback::after {
+    content: "✅";
+}
+
+.ai-option.wrong-choice {
+    border-color: #e74c3c;
+}
+.ai-option.wrong-choice .ai-overlay-feedback {
+    opacity: 1;
+}
+.ai-option.wrong-choice .ai-overlay-feedback::after {
+    content: "❌";
+}
+
+/* Mobiele aanpassingen voor AI game */
+@media (max-width: 800px) {
+    .ai-game-container {
+        flex-direction: column;
+    }
+    .ai-vs {
+        display: none; /* Verberg VS op mobiel voor ruimte */
+    }
+    .ai-option {
+        max-height: 40vh;
+        width: 100%;
+    }
 }

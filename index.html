@@ -48,7 +48,20 @@
 
         <img src="img/image (12).jpg" class="slide" alt="Foto 12">
 
-        <img src="img/image (1).png" class="slide" alt="Foto 13">
+        <img src="img/image (13).png" class="slide" alt="Foto 13">
+
+        <img src="img/image (14).png" class="slide" alt="Foto 14">
+
+        <div class="slide slide-with-overlay">
+            <div class="overlay-container">
+                <img src="img/image (15).png" alt="Foto 15 met knop">
+                <div class="blinking-circle-4" onclick="openModal('ai')"></div>
+            </div>
+        </div>
+
+        <img src="img/image (16).png" class="slide" alt="Foto 16">
+
+
 
 
         <div class="dialogue-box">
@@ -643,6 +656,74 @@
         </div>
     </div>
        
+
+
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content" style="width: 95vw; height: 90vh; max-width: 1200px; padding: 30px; display: flex; flex-direction: column; overflow: hidden; border: none; background: #1a1a1a;">
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 id="ai-title" style="color: #fff; margin: 0;">AI of Echt?</h2>
+                <p id="ai-subtitle" style="color: #ccc; margin: 5px 0;">Klik op de afbeelding die volgens jou door <strong>AI gegenereerd</strong> is.</p>
+                
+                <div style="font-size: 1.2rem; font-weight: bold; color: #007bff; margin-top: 10px;">
+                    <span id="ai-level-indicator" style="color: #ffd700; margin-right: 10px; display:none;">★ EXPERT MODE ★</span>
+                    Ronde: <span id="ai-round">1</span>
+                </div>
+            </div>
+
+            <div class="ai-game-container" id="ai-game-view">
+                <div class="ai-option" id="ai-option-left" onclick="checkAI('left')">
+                    <img src="" id="img-left" alt="Optie A">
+                    <div class="ai-overlay-feedback"></div>
+                </div>
+
+                <div class="ai-vs">VS</div>
+
+                <div class="ai-option" id="ai-option-right" onclick="checkAI('right')">
+                    <img src="" id="img-right" alt="Optie B">
+                    <div class="ai-overlay-feedback"></div>
+                </div>
+            </div>
+
+            <div id="ai-expert-view" style="display: none; flex: 1; justify-content: center; align-items: center; flex-direction: column;">
+                <img id="ai-expert-img" src="" style="max-width: 100%; max-height: 50vh; object-fit: contain; border: 2px solid #ffd700; border-radius: 8px;">
+                <p style="color: #ffd700; margin-top: 10px;">Het bewijs is omcirkeld in de afbeelding.</p>
+            </div>
+
+            <div id="ai-feedback-box" style="display: none; text-align: center; padding: 15px; margin-top: 20px; border-radius: 8px; font-weight: bold;">
+                Feedback tekst komt hier...
+            </div>
+
+            <div class="modal-buttons" style="margin-top: auto; padding-top: 20px; border-top: 1px solid #333;">
+                <button class="cancel-btn" onclick="closeModal()">Stoppen</button>
+                
+                <button class="save-btn" id="ai-next-btn" onclick="nextAIRoundHandler()" style="display: none;">Volgende Afbeelding &rarr;</button>
+                <button class="save-btn" id="ai-finish-btn" onclick="finishAIGame()" disabled style="opacity: 0.5; cursor: not-allowed; display: none;">Terug naar het onderzoek</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ai-success-modal" class="modal-overlay" style="z-index: 250;">
+        <div class="modal-content" style="border: 2px solid #9b59b6; max-width: 600px;">
+            <h2 style="color: #9b59b6; text-align: center;">👁️ Scherpe Blik!</h2>
+            <p>Je hebt de AI-training succesvol afgerond.</p>
+            
+            <div style="background: #333; padding: 20px; border-radius: 5px; margin: 15px 0;">
+                <h3 style="margin-top: 0; color: #fff; font-size: 1rem; margin-bottom: 10px;">Hoe herken je AI?</h3>
+                <ul style="color: #ccc; font-size: 0.9rem; line-height: 1.6; padding-left: 20px;">
+                    <li><strong>Handen & Vingers:</strong> Vaak te veel vingers of vreemde bochten.</li>
+                    <li><strong>Tekst:</strong> AI kan vaak geen leesbare tekst genereren (brabbeltaal).</li>
+                    <li><strong>Achtergrond:</strong> Vaak wazig of onlogisch (mensen die zweven).</li>
+                    <li><strong>Symmetrie:</strong> Ogen die niet gelijk zijn of sieraden die niet kloppen.</li>
+                    <li><strong>Huid:</strong> Soms té glad en plastic-achtig ("airbrushed").</li>
+                </ul>
+            </div>
+
+            <div class="modal-buttons" style="justify-content: center;">
+                <button class="save-btn" onclick="finishAILevel()" style="background-color: #9b59b6; width: 100%;">Terug naar de klant</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
