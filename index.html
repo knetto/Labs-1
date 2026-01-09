@@ -61,6 +61,29 @@
 
         <img src="img/image (16).png" class="slide" alt="Foto 16">
 
+        <img src="img/image (17).png" class="slide" alt="Foto 17">
+
+        <img src="img/image (18).png" class="slide" alt="Foto 18">
+
+        <div class="slide slide-with-overlay">
+            <div class="overlay-container">
+                <img src="img/image (19).png" alt="Foto 19 met knop">
+                <div class="blinking-circle-5" onclick="openModal('phishing')"></div>
+            </div>
+        </div>
+
+        <img src="img/image (20).png" class="slide" alt="Foto 20">
+
+        <img src="img/image (21).png" class="slide" alt="Foto 21">
+
+        <img src="img/image (22).png" class="slide" alt="Foto 22">
+
+        <img src="img/image (23).png" class="slide" alt="Foto 22">
+
+
+
+
+
 
 
 
@@ -724,6 +747,101 @@
             </div>
         </div>
     </div>
+
+
+    <div id="phishing-modal" class="modal-overlay fullscreen-modal">
+        <div class="phone-frame">
+            <div class="phone-notch"></div>
+            
+            <div class="phone-screen" style="position: relative; overflow: hidden;">
+                
+                <div id="scam-caught-modal" style="display:none;">
+                    <div class="feedback-box success-box">
+                        <h3>🚨 Goed gezien!</h3>
+                        <p>Je hebt de oplichter ontmaskerd. Dit waren de signalen:</p>
+                        <ul id="scam-reasons-list"></ul>
+                        <div class="modal-buttons" style="justify-content: center;">
+                            <button class="save-btn margin-top-buttons" onclick="closeScamModalAndReturn()">Terug naar Inbox</button>
+                        </div>           
+                    </div>
+                </div>
+                
+                <div id="insta-inbox-view" class="insta-view">
+                    <div class="insta-header-top">
+                        <span class="back-arrow" onclick="closeModal()">✕</span> 
+                        <span class="header-username"> ♡-Jasmijn-♡ </span>
+                        <span class="header-icon">📝</span>
+                    </div>
+        
+                    <div class="insta-tabs">
+                        <div class="tab active">Primair</div>
+                        <div class="tab">Algemeen</div>
+                        <div class="tab" style="color: #0095f6;">Verzoeken (1)</div>
+                    </div>
+        
+                    <div id="chat-list-container"></div>
+        
+                    <div class="game-footer-status">
+                        <p>Vind de <strong>2 oplichters</strong>.<br>
+                        Status: <span id="scams-found-counter">0</span>/3</p>
+                        <button class="save-btn small-btn" id="phishing-finish-btn" onclick="finishPhishingGame()" disabled style="opacity: 0.5;">Klaar</button>
+                    </div>
+                </div>
+        
+                <div id="insta-chat-view" class="insta-view" style="display: none;">
+                    <div class="insta-header-chat">
+                        <span class="back-arrow" onclick="returnToInbox()">&#8592;</span>
+                        <div class="chat-header-info">
+                            <div class="mini-avatar" id="current-chat-avatar"></div>
+                            <div class="chat-header-text">
+                                <span class="header-username" id="current-chat-name">Naam</span>
+                                <span class="header-subtext">Actief: zojuist</span>
+                            </div>
+                        </div>
+                        <div class="header-icon">ℹ️</div>
+                    </div>
+        
+                    <div id="messages-container" class="messages-area"></div>
+        
+                    <div class="chat-input-bar">
+                        <div class="cam-icon">📷</div>
+                        <div class="fake-input">Bericht...</div>
+                        <div class="input-icons">🎤 🖼️ ❤️</div>
+                    </div>
+                </div>
+        
+                <div id="phishing-feedback-overlay" style="display:none;" onclick="this.style.display='none'">
+                    <div class="feedback-toast" id="phishing-feedback-text">
+                        Feedback tekst
+                    </div>
+                </div>
+    
+            </div> </div> </div>
+
+            <div id="phishing-success-modal" class="modal-overlay" style="display: none; z-index: 250;">
+                <div class="modal-content" style="border: 2px solid #27ae60; max-width: 600px;">
+                    <h2 style="color: #27ae60; text-align: center;">🎣 Phishing Ontmaskerd!</h2>
+                    <p style="text-align: center;">Je hebt je inbox veilig gehouden en alle oplichters gerapporteerd.</p>
+                    
+                    <div style="background: #333; padding: 20px; border-radius: 5px; margin: 15px 0;">
+                        <h3 style="margin-top: 0; color: #fff; font-size: 1rem; margin-bottom: 10px;">🛡️ Pro Tips voor Veiligheid:</h3>
+                        <ul style="color: #ccc; font-size: 0.9rem; line-height: 1.6; padding-left: 20px;">
+                            <li><strong>Zet 2FA aan (Tweestapsverificatie):</strong> Dit is je belangrijkste verdediging. Het is een extra slot op de deur (vaak een code via SMS of app). Zelfs als hackers je wachtwoord hebben, komen ze niet binnen zonder die code!</li>
+                            
+                            <li><strong>De "Ben ik nog ingelogd?" Check:</strong> Klik je op een link en moet je <em>ineens</em> opnieuw inloggen? 🚩 <strong>STOP!</strong> Ga zelf naar de echte site (via Google of je app). Ben je daar gewoon ingelogd? Dan was de link die je kreeg 100% nep.</li>
+                            
+                            <li><strong>Check de URL:</strong> Oplichters gebruiken trucs zoals <em>roblox-app.com</em> of extensies zoals <em>.xyz</em>. Alleen de officiële domeinnaam is veilig.</li>
+                            
+                            <li><strong>De Vrienden Check:</strong> Vraagt een vriend om geld, wachtwoorden of "snel klikken"? Klinkt het dwingend? Bel ze even op. Grote kans dat hun account gehackt is.</li>
+                        </ul>
+                    </div>
+            
+                    <div class="modal-buttons" style="justify-content: center;">
+                        <button class="save-btn" onclick="finishPhishingLevel()" style="background-color: #27ae60; width: 100%; cursor: pointer;">Terug naar de klant ➡️</button>
+                    </div>
+                </div>
+            </div>
+    
 
     <script src="script.js"></script>
 </body>

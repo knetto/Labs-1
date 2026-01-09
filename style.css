@@ -446,6 +446,9 @@ img.slide {
 .margin-bottom-buttons{
     margin-bottom: 20px;
 }
+.margin-top-buttons{
+    margin-top: 10px;
+}
 
 
 
@@ -1091,4 +1094,488 @@ img.slide {
         max-height: 40vh;
         width: 100%;
     }
+}
+
+
+
+/* --- NIEUWE CIRKEL VOOR SLIDE 19 --- */
+.blinking-circle-5 {
+    position: absolute;
+    /* Pas deze waardes aan zodat hij mooi op het telefoonscherm in de afbeelding valt */
+    top: 55%;  
+    left: 50%;
+    width: 15%;
+    height: 10%;
+    
+    border: 7px solid red;
+    border-radius: 10px;
+    transform: translate(-50%, -50%); 
+    
+    pointer-events: auto;
+    cursor: pointer;
+    animation: blink 1s infinite alternate;
+    z-index: 20;
+    transition: background-color 0.3s ease;
+}
+
+.blinking-circle-5:hover {
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+/* --- STIJL VOOR DE FAKE DM GAME --- */
+.dm-bubble {
+    background: #262626; /* Donkergrijs Instagram stijl */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 18px 18px 18px 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+}
+
+.dm-bubble:hover {
+    border-color: #555;
+}
+
+.dm-bubble.found {
+    border-color: #e74c3c; /* Rood randje bij vinden */
+    background: #3a1c1c;
+}
+
+/* --- INSTAGRAM MODAL STYLING --- */
+.insta-modal-container {
+    width: 100vw;
+    height: 100vh;
+    max-width: 500px; /* Mobiel formaat simuleren op desktop */
+    background-color: #000;
+    color: white;
+    padding: 0;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.insta-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* HEADER STYLES */
+.insta-header-top, .insta-header-chat {
+    background-color: #000;
+    padding: 15px;
+    border-bottom: 1px solid #262626;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.header-username { font-weight: bold; font-size: 1.1rem; }
+.back-arrow { font-size: 1.5rem; cursor: pointer; padding-right: 15px;}
+
+/* TABS */
+.insta-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-bottom: 1px solid #262626;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.insta-tabs .tab.active { color: white; border-bottom: 2px solid white; }
+.insta-tabs .tab { color: #8e8e8e; cursor: pointer; padding-bottom: 5px;}
+
+/* CHAT LIJST */
+#chat-list-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.chat-item:hover { background-color: #1a1a1a; }
+
+/* Als een scam volledig is opgelost krijgt hij een groen vinkje */
+.chat-item.solved { background-color: #0c2918; border-right: 4px solid #27ae60; }
+
+.chat-avatar {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background-color: #333;
+    margin-right: 15px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.chat-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.chat-name { font-weight: 500; color: #fff; margin-bottom: 2px; }
+.chat-preview { color: #8e8e8e; font-size: 0.9rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.chat-status-icon { margin-left: 10px; font-size: 1.2rem; }
+
+/* CHAT GESPREK */
+.messages-area {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* --- BERICHT BUBBELS --- */
+.msg-bubble {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 22px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    position: relative;
+    margin-bottom: 4px; /* Iets dichter op elkaar zoals echt insta */
+    word-wrap: break-word;
+}
+
+/* TIJDSTEMPEL (Datum in het midden) */
+.msg-timestamp {
+    width: 100%;
+    text-align: center;
+    color: #8e8e8e;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 20px 0 10px 0;
+    display: block;
+}
+
+/* ONTVANGEN (Links - Grijs) */
+.msg-received {
+    align-self: flex-start;
+    background-color: #262626;
+    color: white;
+    border-bottom-left-radius: 4px; 
+    margin-left: 10px;
+    cursor: pointer;
+    border: 2px solid transparent; 
+}
+.msg-received:hover { background-color: #2f2f2f; }
+
+/* VERZONDEN (Rechts - Instagram Gradient) */
+.msg-sent {
+    align-self: flex-end;
+    /* De echte Instagram DM gradient */
+    background: linear-gradient(135deg, #a615e4 0%, #6830f3 100%);
+    color: white;
+    border-bottom-right-radius: 4px;
+    margin-right: 10px;
+    cursor: default; /* Eigen bericht is niet klikbaar */
+}
+
+/* GROEPERING (Als berichten snel achter elkaar komen) */
+.msg-bubble + .msg-bubble {
+    margin-top: 2px;
+}
+
+/* Gevonden SCAM (Rood) */
+.msg-bubble.found-scam {
+    border: 2px solid #e74c3c;
+    background: #3a1c1c; 
+}
+
+/* INPUT BALK (NEP) */
+.chat-input-bar {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    background-color: #000;
+    border-top: 1px solid #262626;
+}
+.fake-input {
+    flex: 1;
+    background-color: #262626;
+    border-radius: 20px;
+    padding: 10px 15px;
+    color: white;
+    margin: 0 10px;
+    font-size: 0.9rem;
+    color: #8e8e8e;
+}
+
+/* FOOTER & FEEDBACK */
+.game-footer-status {
+    padding: 15px;
+    background: #111;
+    border-top: 1px solid #333;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+#phishing-feedback-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    text-align: center;
+}
+.feedback-toast {
+    background: #fff;
+    color: #000;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    max-width: 80%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* --- FULLSCREEN MODAL BACKGROUND --- */
+.fullscreen-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    
+    display: none; /* <--- VERANDER DIT (was flex) */
+    
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* --- TELEFOON FRAME (GROTER GEMAAKT) --- */
+.phone-frame {
+    width: 430px;        /* AANGEPAST: Breder voor betere leesbaarheid */
+    height: 900px;       /* AANGEPAST: Hoger */
+    max-height: 95vh;    /* AANGEPAST: Gebruik bijna de hele schermhoogte */
+    max-width: 95vw;     /* Zodat hij op mobiel niet buiten beeld valt */
+    background-color: #000;
+    border-radius: 45px; /* Iets ronder */
+    box-shadow: 0 0 0 12px #333, 0 0 50px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden; 
+    border: 8px solid #111;
+}
+
+/* DE "NOTCH" BOVENIN */
+.phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px; /* AANGEPAST: Was 150px */
+    height: 30px;
+    background-color: #111;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    z-index: 100;
+}
+
+/* HET SCHERM ZELF */
+.phone-screen {
+    width: 100%;
+    height: 100%;
+    background-color: #000; /* Instagram dark mode achtergrond */
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding-top: 35px; /* Ruimte voor de notch */
+    box-sizing: border-box;
+}
+
+/* --- DE REST VAN DE INSTAGRAM STIJLEN (Aangepast voor binnen frame) --- */
+
+.insta-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Header */
+.insta-header-top, .insta-header-chat {
+    padding: 10px 15px;
+    border-bottom: 1px solid #262626;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    flex-shrink: 0;
+}
+.header-username { font-weight: bold; font-size: 1rem; }
+.back-arrow { font-size: 1.5rem; cursor: pointer; padding-right: 15px; }
+
+/* Tabs */
+.insta-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-bottom: 1px solid #262626;
+    font-weight: 600;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+.insta-tabs .tab.active { color: white; border-bottom: 2px solid white; }
+.insta-tabs .tab { color: #8e8e8e; cursor: pointer; padding-bottom: 5px; }
+
+/* Chatlijst Container */
+#chat-list-container {
+    flex: 1; /* Vult de rest van de ruimte */
+    overflow-y: auto;
+    /* Verberg scrollbar voor clean look */
+    scrollbar-width: none; 
+}
+#chat-list-container::-webkit-scrollbar { display: none; }
+
+/* Chat Item */
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.chat-item:hover { background-color: #1a1a1a; }
+.chat-item.solved { border-right: 4px solid #27ae60; background-color: rgba(39, 174, 96, 0.1); }
+
+.chat-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+.chat-info { flex: 1; overflow: hidden; }
+.chat-name { font-weight: 500; font-size: 0.95rem; margin-bottom: 2px; }
+.chat-preview { color: #8e8e8e; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Chat View (Berichten) */
+.messages-area {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Bericht Bubbels */
+.msg-bubble {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    position: relative;
+    margin-bottom: 4px;
+    word-wrap: break-word;
+}
+.msg-timestamp {
+    width: 100%; text-align: center; color: #8e8e8e;
+    font-size: 0.7rem; font-weight: 600; margin: 15px 0 8px 0;
+}
+.msg-received {
+    align-self: flex-start; background-color: #262626;
+    color: white; border-bottom-left-radius: 4px; margin-left: 5px;
+    cursor: pointer; border: 2px solid transparent;
+}
+.msg-sent {
+    align-self: flex-end; 
+    background: linear-gradient(135deg, #a615e4 0%, #6830f3 100%);
+    color: white; border-bottom-right-radius: 4px; margin-right: 5px;
+}
+.msg-bubble.found-scam { border: 2px solid #e74c3c; background: #3a1c1c; }
+
+/* Input Bar */
+.chat-input-bar {
+    padding: 10px 15px;
+    display: flex; align-items: center;
+    background-color: #000;
+    border-top: 1px solid #262626;
+    padding-bottom: 20px; /* Iets meer ruimte onderin ivm frame */
+}
+.fake-input {
+    flex: 1; background-color: #262626; border-radius: 20px;
+    padding: 8px 15px; color: #8e8e8e; margin: 0 10px; font-size: 0.9rem;
+}
+
+/* Footer Status */
+.game-footer-status {
+    padding: 15px; background: #111; border-top: 1px solid #333;
+    text-align: center; font-size: 0.85rem; color: #ccc;
+    padding-bottom: 25px;
+}
+.small-btn { padding: 8px 15px; font-size: 0.9rem; margin-top: 8px; cursor: pointer; }
+
+/* Feedback Overlay */
+#phishing-feedback-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: flex; justify-content: center;
+    align-items: center; z-index: 500; text-align: center; padding: 20px;
+}
+.feedback-toast {
+    background: #fff; color: #000; padding: 15px; border-radius: 12px;
+    font-weight: bold; font-size: 0.9rem; max-width: 90%;
+}
+
+/* De modal overlay BINNEN de telefoon */
+#scam-caught-modal {
+    position: absolute; /* Positioneren t.o.v. de phone-screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85); /* Iets donkerder voor beter contrast */
+    z-index: 1000; /* Veel hoger dan de header of chat */
+    
+    /* Flexbox om het witte blokje in het midden te zetten */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Zorg dat hij niet buiten de ronde hoeken van de telefoon komt */
+    border-radius: 30px; /* Pas dit aan als je phone-screen een andere radius heeft */
+    box-sizing: border-box;
+}
+
+/* Het witte blokje zelf */
+.success-box {
+    background: white;
+    width: 85%; /* Niet te breed, zodat er randjes overblijven */
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: left;
+    border-top: 6px solid #e74c3c;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    color: #333;
+    animation: popIn 0.3s ease-out;
+}
+
+/* Leuke animatie dat hij in beeld plopt */
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }

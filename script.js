@@ -41,6 +41,11 @@
     let level2Unlocked = false; 
     let level3Unlocked = false; 
     let level4Unlocked = false;
+    let level5Unlocked = false;
+
+    // Minigame 5 variabelen
+    let phishingScore = 0;
+    let foundPhishing = [];
 
 
     // ==========================================
@@ -148,12 +153,52 @@
             "\"Laten we kijken of we samen de AI-fouten kunnen spotten, zodat je dit in de toekomst herkent.\"",
             "Klik op de rode cirkel op het scherm om de AI-training te starten."
         ],
-        // Slide 16 (15) - EINDE VERHAAL
+        // Slide 16 (15)
         [
             "\"Ik voel me nog steeds stom, maar nu weet ik tenminste waar ik op moet letten,\" zei hij bij het weggaan.",
             "\"Geen nep-profielen meer voor mij. Ik ga weer echte mensen ontmoeten in de echte wereld.\"",
-            "Vier zaken opgelost. Mijn koffie is koud, maar de stad is veilig.",
-            "Tijd om naar huis te gaan. Case closed."
+            "Vier zaken opgelost. Mijn koffie is koud, maar de stad is veilig."
+        ],
+        // Slide 17 (16) - EINDE VERHAAL (NIEUWE KLANT)
+        [
+            "Ik wilde net het bordje 'gesloten' omdraaien, toen de deur met een zwaai openvloog.",
+            "Een jonge vrouw stormde in paniek binnen, haar telefoon stevig in haar hand geklemd.",
+            "Ze trilde over haar hele lijf. \"Alsjeblieft, zeg dat je me kunt helpen! Mijn hele leven staat op dat account!\""
+        ],
+        // Slide 18 (17) - EINDE VERHAAL (PROBLEEM)
+        [
+            "\"Ga rustig zitten,\" zei ik kalmerend. \"Vertel me wat er is gebeurd.\"",
+            "\"Ik kreeg een DM van mijn beste vriendin via Instagram,\" snikte ze. \"Ze deed mee aan een modeshow-wedstrijd.\"",
+            "\"Ze vroeg of ik via een linkje op haar wilde stemmen. Ik logde in om te helpen... en toen werd ik eruit gegooid. Alles weg!\""
+        ],
+        // Slide 19 (18) - EINDE VERHAAL (GAME TRIGGER)
+        [
+            "Ik nam haar telefoon aan. \"Dit is een klassieke truc. Je bent 'gephisht'. Dat bericht kwam niet van je vriendin.\"",
+            "\"Hackers nemen accounts over en sturen dit soort nep-links naar alle contacten. We moeten leren de signalen te herkennen.\"",
+            "\"Kijk goed naar de URL en de taal. Laten we kijken of we de nepperts eruit kunnen vissen.\"",
+            "Klik op de rode cirkel op het scherm om de phishing-test te starten."
+        ],
+        // Slide 20 (19) - EINDE VERHAAL (AFSLUITING)
+        [
+            "\"Je hebt gelijk, de link zag er eigenlijk heel raar uit,\" gaf ze toe na de uitleg.",
+            "Ze heeft direct contact opgenomen met support en 2FA aangezet. \"Bedankt detective, ik trap er nooit meer in!\"",
+            "Ze zwaaide en liep de deur uit. Vijf zaken, vijf lessen. De stad is weer een stukje veiliger."
+        ],
+        // Slide 21 (20) - EINDE VERHAAL (RELAXEN)
+        [
+            "Met een diepe, hoorbare zucht zak ik onderuit. Mijn voeten vinden de rand van het bureau. \"Zo, dat was 'm dan...\"",
+            "De laatste zaak is gesloten, de inbox is leeg. De digitale wereld is voor even weer een stukje veiliger.",
+            "Ik sluit mijn ogen even. De vermoeidheid slaat toe. Tijd om af te sluiten."
+        ],
+        // Slide 22 (21) - EINDE VERHAAL (NAAR HUIS)
+        [
+            "Ik pak mijn laptop, mijn trouwe partner in crime, en loop naar de uitgang. Nog één blik over mijn schouder naar mijn kantoor.",
+            "Het was een lange, intensieve dag vol digitale gevaren. Maar we hebben ze verslagen.",
+            "Ik trek de deur achter me dicht. Morgen weer een nieuwe dag. Slaap lekker, Cyber Detective Agency."
+        ],
+        // Slide 22 (21) - EINDE VERHAAL (NAAR HUIS)
+        [
+            "EINDE"
         ]
         
     ];
@@ -206,8 +251,10 @@
         if (currentSlide === 10 && direction === 1 && !level3Unlocked) return;
 
         // Lock 4: AI Game (Slide 15 is index 14)
-        // HIER ZAT DE FOUT: Het moet 14 zijn, niet 15.
         if (currentSlide === 14 && direction === 1 && !level4Unlocked) return; 
+
+        // Lock 5: Phishing Game (Slide 19 is index 18) <--- NIEUW
+        if (currentSlide === 18 && direction === 1 && !level5Unlocked) return;
 
         let newIndex = currentSlide + direction;
         if (newIndex < 0 || newIndex >= slides.length) return;
@@ -235,24 +282,32 @@
     // ==========================================
     // 5. MODAL MANAGER
     // ==========================================
-
-    window.openModal = function(gameType) {
-        if (currentLine < storyLines[currentSlide].length - 1) return;
-
-        isModalOpen = true;
-
-        if (gameType === 'password') {
-            passwordModal.style.display = 'flex';
-            passInput1.value = ""; passInput2.value = ""; errorBox.style.display = 'none';
-            passInput1.type = "password"; passInput2.type = "password";
-        } else if (gameType === 'website') {
-            resetWebsiteGame();
-            websiteModal.style.display = 'flex';
-        } else if (gameType === 'news') {
-            resetNewsGame();
-            newsModal.style.display = 'flex';
+        window.openModal = function(gameType) {
+            if (gameType === 'ai') {
+                resetAIGame();
+                document.getElementById('ai-modal').style.display = 'flex';
+                isModalOpen = true;
+            } else {
+                // Roep de oude logica aan voor password/website/news
+                // (Als je de code hierboven plakt in je script, moet je dit even netjes samenvoegen met je switch statement)
+                // Hieronder hoe het eruit ziet als je het integreert in je BESTAANDE switch:
+                 if (gameType === 'password') {
+                    passwordModal.style.display = 'flex';
+                    passInput1.value = ""; passInput2.value = ""; errorBox.style.display = 'none';
+                    passInput1.type = "password"; passInput2.type = "password";
+                } else if (gameType === 'website') {
+                    resetWebsiteGame();
+                    websiteModal.style.display = 'flex';
+                } else if (gameType === 'news') {
+                    resetNewsGame();
+                    newsModal.style.display = 'flex';
+                } else if (gameType === 'phishing') { 
+                    resetPhishingGame();
+                    document.getElementById('phishing-modal').style.display = 'flex';
+                 }
+                isModalOpen = true;
+            }
         }
-    }
 
     window.closeModal = function() {
         passwordModal.style.display = 'none';
@@ -263,6 +318,9 @@
         
         newsModal.style.display = 'none';
         newsSuccessModal.style.display = 'none';
+
+        document.getElementById('phishing-modal').style.display = 'none';
+        document.getElementById('phishing-success-modal').style.display = 'none';
         
         isModalOpen = false;
     }
@@ -665,6 +723,12 @@
                 currentSlide = 15; // Spring naar het einde
                 alert("👨‍💻 Cheat: Level 4 (Nieuws) voltooid!");
             }
+            else if (cheatStep === 5) {
+                // LEVEL 5 COMPLETED
+                level4Unlocked = true;
+                currentSlide = 19; // Spring naar het einde
+                alert("👨‍💻 Cheat: Level 5 (Nieuws) voltooid!");
+            }
 
             // Update de UI naar de nieuwe slide
             slides[currentSlide].classList.add('active');
@@ -734,27 +798,27 @@
     const aiPart2 = [
         { 
             real: "img/ai2/real1.png", ai: "img/ai2/fake1.png", 
-            answer: "img/ai2/1antwoord.png", aiSide: 'left',
+            answer: "img/ai2/1antwoord.jpg", aiSide: 'left',
             feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
         },
         { 
             real: "img/ai2/real2.png", ai: "img/ai2/fake2.png", 
-            answer: "img/ai2/2antwoord.png", aiSide: 'right',
+            answer: "img/ai2/2antwoord.jpg", aiSide: 'right',
             feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
         },
         { 
             real: "img/ai2/real3.png", ai: "img/ai2/fake3.png", 
-            answer: "img/ai2/3antwoord.png", aiSide: 'left',
+            answer: "img/ai2/3antwoord.jpg", aiSide: 'left',
             feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
         },
         { 
             real: "img/ai2/real4.jpeg", ai: "img/ai2/fake4.jpeg", 
-            answer: "img/ai2/4antwoord.png", aiSide: 'right',
+            answer: "img/ai2/4antwoord.jpg", aiSide: 'right',
             feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
         },
         { 
             real: "img/ai2/real5.jpeg", ai: "img/ai2/fake5.jpeg", 
-            answer: "img/ai2/5antwoord.png", aiSide: 'left',
+            answer: "img/ai2/5antwoord.jpg", aiSide: 'left',
             feedback: "Kijk naar de cirkels: Hier is de AI de mist in gegaan." 
         }
     ];
@@ -958,33 +1022,7 @@ function nextLogic(currentList) {
         btn.style.cursor = 'pointer';
     }
     
-        // 5. Open Modal Uitbreiding
-        // Zorg dat je bestaande openModal functie nu ook 'ai' ondersteunt
-        const originalOpenModal = window.openModal;
-        window.openModal = function(gameType) {
-            if (gameType === 'ai') {
-                resetAIGame();
-                document.getElementById('ai-modal').style.display = 'flex';
-                isModalOpen = true;
-            } else {
-                // Roep de oude logica aan voor password/website/news
-                // (Als je de code hierboven plakt in je script, moet je dit even netjes samenvoegen met je switch statement)
-                // Hieronder hoe het eruit ziet als je het integreert in je BESTAANDE switch:
-                 if (gameType === 'password') {
-                    passwordModal.style.display = 'flex';
-                    passInput1.value = ""; passInput2.value = ""; errorBox.style.display = 'none';
-                    passInput1.type = "password"; passInput2.type = "password";
-                } else if (gameType === 'website') {
-                    resetWebsiteGame();
-                    websiteModal.style.display = 'flex';
-                } else if (gameType === 'news') {
-                    resetNewsGame();
-                    newsModal.style.display = 'flex';
-                }
-                isModalOpen = true;
-            }
-        }
-    
+            
         // 6. Afronden en Level 4 Unlocken
         window.finishAIGame = function() {
             // Sluit game modal
@@ -1006,12 +1044,542 @@ function nextLogic(currentList) {
 
 
 
+// ==========================================
+    // 13. GAME 5 LOGICA: PHISHING (FULL INBOX)
+    // ==========================================
 
+    // ==========================================
+    // NIEUWE DATABASE MET REALISTISCHE CHATS
+    // ==========================================
+    const chatDatabase = [
+        // --- SCAM 1: De "Stem op mij" truc (Sophie) ---
+        {
+            id: 'scam1',
+            type: 'scam',
+            name: 'Sophie_x_Dance',
+            avatar: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)', 
+            preview: 'De stemming sluit bijna! 😱',
+            solved: false,
+            messages: [
+                { text: "Dinsdag 14:23", type: 'timestamp' },
+                { text: "Heeii! Lang niet gesproken! Hoe is het? ❤️", sender: 'them', type: 'safe', feedback: "Beetje slijmen vooraf..." },
+                { text: "Hey Soph! Ja goed hoor, met jou?", sender: 'me' }, 
+                
+                { text: "Ja super! Ik zit in de finale van een modellenwedstrijd! 📸", sender: 'them', type: 'safe', feedback: "Klinkt leuk, maar blijf scherp." },
+                { text: "Oh vet! Gefeliciteerd!", sender: 'me' },
 
+                { text: "Thnx! Maar ik heb echt een mega gunst nodig... Wil je op me stemmen?", sender: 'them', type: 'safe', feedback: "Nu komt de vraag." },
+                { text: "Tuurlijk, stuur maar.", sender: 'me' }, 
 
+                { text: "Vandaag 10:41", type: 'timestamp' },
+                { text: "Je bent een held! Ik heb nog 5 stemmen nodig voor een contract!", sender: 'them', type: 'scam', reason: "grammar", feedback: "Verdacht: Ze zetten druk op je ('nog maar 5 nodig') om je medelijden te wekken." },
+                { text: "Het sluit over 10 minuutjes dus doe snel!! 🙏", sender: 'them', type: 'scam', reason: "urgency", feedback: "Urgentie: 'Doe snel' is bedoeld om je te laten klikken zonder na te denken." },
+                { text: "De link is: http://instagram-model-vote.xyz/sophie", sender: 'them', type: 'scam', reason: "link", feedback: "Kijk naar de link! '.xyz' is geen Instagram. Als je hier inlogt, stelen ze je wachtwoord." }
+            ]
+        },
 
+        // --- REAL 1: De ECHTE Roblox speler (Jens) ---
+        {
+            id: 'real1',
+            type: 'real',
+            name: 'Jens_Gamer',
+            avatar: 'green', 
+            preview: 'Nieuwe update is live!',
+            messages: [
+                { text: "Gisteren 20:00", type: 'timestamp' },
+                { text: "Yo, ben je online?", sender: 'them', type: 'safe', feedback: "Jens speelt dit spel altijd met je." },
+                { text: "Yes, ik start nu op.", sender: 'me' },
+                { text: "Die nieuwe obby is eindelijk uit.", sender: 'them', type: 'safe', feedback: "Normaal game-praatje." },
+                { text: "Ik zit al in de server, kom je?", sender: 'them', type: 'safe', feedback: "Geen dwang, gewoon een vraag." },
+                { text: "Is goed, stuur link.", sender: 'me' },
+                { text: "Hier: https://www.roblox.com/games/99242", sender: 'them', type: 'tricky', feedback: "Scherp! Dit is de échte site (roblox.com) met https:// en een slotje. Dit is veilig." }
+            ]
+        },
 
+        // --- REAL 2: Vriendin over kleding ---
+        {
+            id: 'real3',
+            type: 'real',
+            name: 'Lisa.K',
+            avatar: 'pink',
+            preview: 'Heb jij die hoodie al?',
+            messages: [
+                { text: "Vandaag 12:30", type: 'timestamp' },
+                { text: "Hee, is jouw bestelling van Zalando al binnen?", sender: 'them', type: 'safe', feedback: "Gewoon een vriendin die iets vraagt." },
+                { text: "Nog niet, komt morgen denk ik.", sender: 'me' },
+                { text: "De mijne kwam net, maar hij is echt veel te groot :(", sender: 'them', type: 'safe', feedback: "Balen voor haar, maar geen scam." },
+                { text: "Ah dat is kut. Welke had je?", sender: 'me' },
+                { text: "Kijk deze bedoelde ik:", sender: 'them', type: 'safe', feedback: "Ze stuurt een voorbeeld." },
+                { text: "https://www.zalando.nl/hoodie-black-123", sender: 'them', type: 'tricky', feedback: "Dit is een link naar een echte webshop (zalando.nl). Niets mis mee." }
+            ]
+        },
 
+        // --- REAL 3: Moeder ---
+        {
+            id: 'real2',
+            type: 'real',
+            name: 'Mama',
+            avatar: 'purple',
+            preview: 'Vergeet je fietssleutel niet!',
+            messages: [
+                { text: "Vandaag 08:15", type: 'timestamp' },
+                { text: "Hoi lieverd, hoe laat ben je thuis?", sender: 'them', type: 'safe', feedback: "Gewoon je moeder." },
+                { text: "Rond 4 uur, heb nog training.", sender: 'me' },
+                { text: "Oké is goed. Opa en oma komen ook eten vanavond.", sender: 'them', type: 'safe', feedback: "Gezellig." },
+                { text: "Vergeet je niet je fietssleutel mee te nemen als je weggaat?", sender: 'them', type: 'safe', feedback: "Bezorgde moeders zijn geen hackers 😉" }
+            ]
+        },
 
+        // --- REAL 4: Groepsapp Klas ---
+        {
+            id: 'real4',
+            type: 'real',
+            name: 'Groep 8B - De Besten 🎓',
+            avatar: 'orange',
+            preview: 'Heeft iemand wiskunde af?',
+            messages: [
+                { text: "Gisteren 15:45", type: 'timestamp' },
+                { text: "Jongens, wat moesten we doen voor Engels?", sender: 'them', type: 'safe', feedback: "Huiswerkvragen." },
+                { text: "Woordjes blz 24 leren.", sender: 'them', type: 'safe', feedback: "Helaas, huiswerk is echt. Geen scam." },
+                { text: "Pff geen zin innn", sender: 'me' }
+            ]
+        },
+
+        // --- REAL 5: Voetbalteam ---
+        {
+            id: 'real5',
+            type: 'real',
+            name: 'Coach Mark',
+            avatar: 'gray',
+            preview: 'Zaterdag verzamelen om 08:30',
+            messages: [
+                { text: "Donderdag 19:00", type: 'timestamp' },
+                { text: "Mannen, zaterdag spelen we uit tegen FC Lisse.", sender: 'them', type: 'safe', feedback: "Sport info." },
+                { text: "We verzamelen om 08:30 bij de kantine.", sender: 'them', type: 'safe', feedback: "Duidelijke afspraak." },
+                { text: "Is goed coach!", sender: 'me' },
+                { text: "Niet vergeten je uit-tenue mee te nemen!", sender: 'them', type: 'safe', feedback: "Geen rare linkjes, gewoon info." }
+            ]
+        },
+        
+                // --- REAL 6: Tikkie (Betaling) ---
+                {
+                    id: 'real6',
+                    type: 'real',
+                    name: 'Fleur <3',
+                    avatar: 'linear-gradient(to right, #ff9966, #ff5e62)',
+                    preview: 'Hier is geld voor de bios 🍿',
+                    messages: [
+                        { text: "Vandaag 14:00", type: 'timestamp' },
+                        { text: "Was echt gezellig gisteren!", sender: 'them', type: 'safe', feedback: "Gewoon een vriendin." },
+                        { text: "Ja vond ik ook!", sender: 'me' },
+                        { text: "Ik kreeg nog geld van je voor het kaartje toch?", sender: 'me' },
+                        { text: "Ohja sorry helemaal vergeten!", sender: 'them', type: 'safe', feedback: "Normaal gesprek." },
+                        { text: "Hier is een Tikkie, is dat goed?", sender: 'them', type: 'safe', feedback: "Ze stuurt een betaalverzoek." },
+                        { text: "https://tikkie.me/pay/Fleur/29dj29", sender: 'them', type: 'tricky', feedback: "Goed gezien! 'tikkie.me' is de officiële en veilige link van Tikkie." }
+                    ]
+                },// --- SCAM 2: De Roblox Hater (Milan) die "gehackt" is ---
+        {
+            id: 'scam2',
+            type: 'scam',
+            name: 'Milan_010',
+            avatar: 'darkblue',
+            preview: 'Yo check dit ff',
+            solved: false,
+            messages: [
+                // --- DAG 1: Het bewijs dat hij het haat ---
+                { text: "Maandag 19:30", type: 'timestamp' },
+                { text: "Bro, kom je vanavond FIFA?", sender: 'them', type: 'safe', feedback: "Gewoon een oude chat." },
+                { text: "Nah man, ben ff Roblox aan t doen. Join je?", sender: 'me' }, 
+
+                { text: "Ik ga echt geen Roblox doen man, dat is voor kleuters 😂", sender: 'them', type: 'safe', feedback: "BELANGRIJKE HINT: Milan haat Roblox. Onthoud dit!" },
+                { text: "Nooit meer vragen gap, ik speel dat niet.", sender: 'them', type: 'safe', feedback: "Hij is heel duidelijk: hij speelt dit niet." },
+                { text: "Haha is goed rustig maar.", sender: 'me' },
+
+                // --- DAG 2: Tussendoor normaal gesprek ---
+                { text: "Gisteren 16:15", type: 'timestamp' },
+                { text: "Gaan we nog trainen morgen?", sender: 'them', type: 'safe', feedback: "Normaal gesprek, niks aan de hand." },
+                { text: "Ja sws, ben er om 19u.", sender: 'me' }, 
+
+                // --- DAG 3: De Hack (Met de lastige link) ---
+                { text: "Zojuist", type: 'timestamp' },
+                { text: "Yo bro! Kijk dit event, ik heb net 10.000 Robux gekregen!", sender: 'them', type: 'scam', reason: "grammar", feedback: "Alarmbellen! 🚩 Gisteren haatte hij het nog en vond het voor kleuters. Dit is Milan niet, hij is gehackt!" },
+                { text: "Huh? Jij haatte dat toch?", sender: 'me' }, 
+
+                { text: "Ja maar dit is gratis geld bro. Klik snel hier:", sender: 'them', type: 'scam', reason: "link", 
+                  feedback: "⚠️ <strong>HEEL TRICKY!</strong><br>Deze link lijkt veilig (slotje + .com), maar de naam klopt niet.<br>De echte site is roblox.com, niet <em>roblox-app</em>.<br><strong>DE GOUDEN TIP:</strong><br>Moet je na het klikken opnieuw inloggen? <strong>STOP!</strong> 🛑<br>Ga zelf naar de echte site. Ben je daar wel nog ingelogd? Dan is deze link nep." }
+            ]
+        },
+        
+                // --- REAL 7: Oma (Beetje onhandig, maar veilig) ---
+                {
+                    id: 'real7',
+                    type: 'real',
+                    name: 'Oma Jannie',
+                    avatar: '#8e44ad', // Paars
+                    preview: 'Hoe werkt die Ipad nou?',
+                    messages: [
+                        { text: "Gisteren 10:15", type: 'timestamp' },
+                        { text: "Hoi lieverd met oma.", sender: 'them', type: 'safe', feedback: "Het is je oma maar." },
+                        { text: "Kom je zaterdag op de koffie?", sender: 'them', type: 'safe', feedback: "Gezellige vraag." },
+                        { text: "Ja leuk oma! Rond 11 uur?", sender: 'me' },
+                        { text: "Dat is goed. Ik heb ook een appeltaart gebakken.", sender: 'them', type: 'safe', feedback: "Oma's hacken je niet met taart." },
+                        { text: "Kijk ik heb een foto gemaakt:", sender: 'them', type: 'safe', feedback: "Ze probeert een foto te sturen." },
+                        { text: "IMG_2024_TAART.JPG", sender: 'them', type: 'safe', feedback: "Gewoon een bestandsnaam, geen link." }
+                    ]
+                },
+        
+                // --- REAL 8: Schoolproject (Google Docs) ---
+                {
+                    id: 'real8',
+                    type: 'real',
+                    name: 'Mees (Klas)',
+                    avatar: '#2ecc71', // Groen
+                    preview: 'De presentatie is af',
+                    messages: [
+                        { text: "Vandaag 16:45", type: 'timestamp' },
+                        { text: "Yo, ik heb mijn deel van de dia's af.", sender: 'them', type: 'safe', feedback: "Samenwerking voor school." },
+                        { text: "Lekker man. Ziet het er goed uit?", sender: 'me' },
+                        { text: "Ja best wel. Wil je even checken?", sender: 'them', type: 'safe', feedback: "Vraagt om feedback." },
+                        { text: "Linkje staat in de beschrijving, maar hier nog een keer:", sender: 'them', type: 'safe', feedback: "Logisch dat hij de link stuurt." },
+                        { text: "https://docs.google.com/presentation/d/e/291", sender: 'them', type: 'tricky', feedback: "Veilig! 'docs.google.com' is de echte site van Google." }
+                    ]
+                },
+        
+                // --- REAL 9: YouTube video van vriend (Bas) ---
+        {
+            id: 'real9',
+            type: 'real',
+            name: 'Bas_03',
+            avatar: '#c0392b', // Rood (YouTube kleur)
+            preview: 'Deze gast is niet goed 😂',
+            messages: [
+                { text: "Vandaag 20:12", type: 'timestamp' },
+                { text: "Bro heb je de nieuwe video van MrBeast al gezien?", sender: 'them', type: 'safe', feedback: "Gewoon een vriend die over YouTube praat." },
+                { text: "Nee nog niet, is ie online?", sender: 'me' },
+                { text: "Ja net, ze hebben een eiland gekocht ofzo.", sender: 'them', type: 'safe', feedback: "Klinkt als een normale conversatie." },
+                { text: "Check ff:", sender: 'them', type: 'safe', feedback: "Hij stuurt de link." },
+                { text: "https://youtu.be/x9-jKs20a", sender: 'them', type: 'tricky', feedback: "Veilig! 'youtu.be' is de officiële, veilige korte link van YouTube. Niets aan de hand." }
+            ]
+        },
+        
+                // --- SCAM 3: De "Ben jij dit?" vriendentruc (EXTRA LASTIG) ---
+                {
+                    id: 'scam3',
+                    type: 'scam',
+                    name: 'Sem_V_2009',
+                    avatar: '#3498db', // Blauw
+                    preview: 'OMG ben jij dit?? 💀',
+                    solved: false,
+                    messages: [
+                        { text: "Vandaag 19:12", type: 'timestamp' },
+                        { text: "Ewa, alles goed?", sender: 'them', type: 'safe', feedback: "Lijkt veilig: Sem begint het gesprek normaal om vertrouwen te winnen." },
+                        { text: "Ja rustig, met jou?", sender: 'me' },
+                        
+                        { text: "Mwah, gaat wel. Maar bro...", sender: 'them', type: 'safe', feedback: "Hij bouwt de spanning op." },
+                        { text: "Ik zag net echt iets heel raars op TikTok voorbij komen.", sender: 'them', type: 'safe', feedback: "Nog steeds geen link, hij maakt je nieuwsgierig." },
+                        { text: "Hoezo? Wat dan?", sender: 'me' },
+        
+                        { text: "Iemand heeft een video van jou geplaatst waar je echt raar doet 😂", sender: 'them', type: 'scam', reason: "curiosity", feedback: "Manipulatie: Dit is bedoeld om je te laten schrikken en uit nieuwsgierigheid te laten klikken." },
+                        { text: "Ik dacht eerst dat het nep was, maar het lijkt echt op jou.", sender: 'them', type: 'scam', reason: "social_engineering", feedback: "Druk opvoeren: Hij bevestigt dat jij het bent om je onzeker te maken." },
+                        
+                        { text: "Kijk snel voordat ie offline gehaald wordt:", sender: 'them', type: 'scam', reason: "urgency", feedback: "Urgentie: 'Voordat ie offline gaat' zorgt dat je niet nadenkt." },
+                        { text: "http://tiktok-secure-login.net/video/99221", sender: 'them', type: 'scam', reason: "link", feedback: "Kijk goed! Er staat 'tiktok-secure-login.net'. De echte site is gewoon tiktok.com. Dit is een nepsite om je wachtwoord te stelen." }
+                    ]
+                }
+    ];
+
+    let currentOpenChatId = null;
+    let scamsSolvedCount = 0;
+
+    // --- 1. START / RESET ---
+    window.resetPhishingGame = function() {
+        scamsSolvedCount = 0;
+        currentOpenChatId = null;
+        
+        // Reset opgelost status in data
+        chatDatabase.forEach(chat => {
+            if(chat.type === 'scam') chat.solved = false;
+        });
+
+        // UI Reset
+        document.getElementById('scams-found-counter').innerText = '0';
+        document.getElementById('phishing-finish-btn').disabled = true;
+        document.getElementById('phishing-finish-btn').innerText = "Klaar (Vind ze alle 3)";
+        document.getElementById('phishing-finish-btn').style.opacity = "0.5";
+
+        // Toon Inbox, Verberg Chat
+        document.getElementById('insta-inbox-view').style.display = 'flex';
+        document.getElementById('insta-chat-view').style.display = 'none';
+
+        renderChatList();
+    }
+
+    // --- 2. RENDER DE LIJST (INBOX) ---
+    function renderChatList() {
+        const container = document.getElementById('chat-list-container');
+        container.innerHTML = ""; // Leegmaken
+
+        chatDatabase.forEach(chat => {
+            const div = document.createElement('div');
+            div.className = 'chat-item';
+            if (chat.solved) div.classList.add('solved');
+
+            // Maak avatar (kleur of verloop)
+            let avatarStyle = chat.avatar.includes('gradient') ? `background: ${chat.avatar}` : `background-color: ${chat.avatar}`;
+            
+            div.innerHTML = `
+                <div class="chat-avatar" style="${avatarStyle}"></div>
+                <div class="chat-info">
+                    <div class="chat-name">${chat.name} ${chat.type === 'real' && chat.name === 'Zalando' ? '☑️' : ''}</div>
+                    <div class="chat-preview">${chat.solved ? '✅ Opgelost: Oplichter gerapporteerd' : chat.preview}</div>
+                </div>
+                ${chat.solved ? '<div class="chat-status-icon">✅</div>' : ''}
+            `;
+
+            div.onclick = () => openChat(chat.id);
+            container.appendChild(div);
+        });
+    }
+
+    // --- 3. OPEN EEN CHAT ---
+    window.openChat = function(id) {
+        currentOpenChatId = id;
+        const chat = chatDatabase.find(c => c.id === id);
+        
+        // UI Wisselen
+        document.getElementById('insta-inbox-view').style.display = 'none';
+        document.getElementById('insta-chat-view').style.display = 'flex';
+
+        // Header vullen
+        document.getElementById('current-chat-name').innerText = chat.name;
+        let avatarStyle = chat.avatar.includes('gradient') ? `background: ${chat.avatar}` : `background-color: ${chat.avatar}`;
+        document.getElementById('current-chat-avatar').style = avatarStyle;
+
+        // Berichten renderen
+        const msgContainer = document.getElementById('messages-container');
+        msgContainer.innerHTML = ""; // Leegmaken
+
+        chat.messages.forEach((msg) => {
+            
+            // TYPE 1: TIJDSTEMPEL
+            if (msg.type === 'timestamp') {
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'msg-timestamp';
+                timeDiv.innerText = msg.text;
+                msgContainer.appendChild(timeDiv);
+                return;
+            }
+
+            const bubble = document.createElement('div');
+
+            // TYPE 2: MIJN EIGEN BERICHT
+            if (msg.sender === 'me') {
+                bubble.className = 'msg-bubble msg-sent';
+                bubble.innerText = msg.text;
+            } 
+            // TYPE 3: BERICHT VAN ANDER
+            else {
+                bubble.className = 'msg-bubble msg-received';
+                bubble.innerText = msg.text;
+                
+                // BELANGRIJK: Als we dit bericht al eerder hadden gevonden, maak het direct rood!
+                if (msg.found === true) {
+                    bubble.classList.add('found-scam');
+                }
+                
+                // Klik event
+                bubble.onclick = function() {
+                    handleMessageClick(chat, msg, bubble);
+                };
+            }
+
+            msgContainer.appendChild(bubble);
+        });
+
+        // Scroll naar beneden
+        setTimeout(() => {
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }, 50);
+    }
+
+    // --- 4. KLIK LOGICA (HET SPEL - AANGEPAST) ---
+    function handleMessageClick(chat, msg, bubbleElement) {
+        // Als de chat al helemaal opgelost is, hoeven we niks meer te doen
+        if (chat.solved) return;
+
+        // Als dit specifieke bericht al gevonden was (maar de chat nog niet 'solved' - zou niet moeten voorkomen met nieuwe logica, maar voor de zekerheid)
+        if (msg.found) return;
+
+        const feedbackOverlay = document.getElementById('phishing-feedback-overlay');
+        const feedbackText = document.getElementById('phishing-feedback-text');
+        
+        // CASE 1: ECHTE CHAT of VEILIG BERICHT (Foute keuze)
+        if (chat.type === 'real' || msg.type === 'safe' || msg.type === 'tricky') {
+            feedbackOverlay.style.display = 'flex';
+            feedbackText.style.color = '#333';
+            feedbackText.innerHTML = `<strong>Niets aan de hand.</strong><br>${msg.feedback}`;
+            
+            // Visuele feedback (groen knipperen)
+            bubbleElement.style.border = "2px solid #27ae60";
+            setTimeout(() => {
+                bubbleElement.style.border = "2px solid transparent";
+            }, 1000);
+        } 
+        
+        // CASE 2: SCAM ELEMENT GEVONDEN (Goede keuze!)
+        // NIEUWE LOGICA: Eén klik is genoeg om de hele chat op te lossen.
+        else if (msg.type === 'scam') {
+           // Roep direct de functie aan die alles afhandelt
+           catchScamImmediately(chat);
+        }
+    }
+
+    // --- NIEUWE FUNCTIE: HANDELT DE SCAM DIRECT AF NA 1 KLIK ---
+    function catchScamImmediately(chat) {
+        // 1. Markeer de chat als opgelost
+        chat.solved = true;
+
+        let reasonsHtml = "";
+
+        // 2. Loop door ALLE berichten in deze chat
+        chat.messages.forEach(m => {
+            // Als het een scam bericht is (ook degene die je NIET hebt aangeklikt)
+            if (m.type === 'scam') {
+                // Markeer als gevonden in de data
+                m.found = true; 
+                // Voeg de feedback toe aan de lijst voor de modal
+                reasonsHtml += `<li>${m.feedback}</li>`;
+            }
+        });
+
+        // 3. Visuele Update: Herlaad de huidige chat view. 
+        // Omdat we in stap 2 de data (m.found = true) hebben aangepast, 
+        // zullen nu automatisch alle scam-bubbels rood worden.
+        openChat(chat.id); 
+
+        // 4. Vul de nieuwe modal met de verzamelde redenen
+        document.getElementById('scam-reasons-list').innerHTML = reasonsHtml;
+
+        // 5. Toon de nieuwe succes modal (in plaats van de alert)
+        // Even wachten zodat je de rode bubbels ziet verschijnen voordat de modal eroverheen komt
+        setTimeout(() => {
+             document.getElementById('scam-caught-modal').style.display = 'flex';
+        }, 300);
+    }
+
+    // --- NIEUWE FUNCTIE: SLUIT MODAL EN GA TERUG ---
+    window.closeScamModalAndReturn = function() {
+        document.getElementById('scam-caught-modal').style.display = 'none';
+        returnToInbox();
+    }
+
+    // --- DEZE OUDE FUNCTIE MAG WEG ---
+    /*
+    function checkIfChatSolved(chat) {
+       // ... deze hele functie is niet meer nodig ...
+    }
+    */
+
+    // --- NIEUWE FUNCTIE: Update de Inbox Teller & Knop (Ongewijzigd, ter referentie) ---
+    function updateInboxState() {
+        // Tel opnieuw in de database hoeveel chats op 'solved' staan
+        const solvedCount = chatDatabase.filter(c => c.solved).length;
+        
+        // Update de tekst (bv. "1/2")
+        const counterElement = document.getElementById('scams-found-counter');
+        if (counterElement) {
+            counterElement.innerText = solvedCount;
+        }
+
+        // Update de knop als we er 3 (of meer) hebben
+        const btn = document.getElementById('phishing-finish-btn');
+        if (btn) {
+            if (solvedCount >= 3) {
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+                btn.style.backgroundColor = "#27ae60"; // Groen
+                btn.innerText = "Missie Voltooid! (Klik hier)";
+            } else {
+                // Nog niet klaar
+                btn.disabled = true;
+                btn.style.opacity = "0.5";
+                btn.style.cursor = "not-allowed";
+                btn.style.backgroundColor = ""; // Reset
+                btn.innerText = "Klaar (Vind ze allemaal)";
+            }
+        }
+    }
+
+    // --- 5. CHECK STATUS & UPDATE UI ---
+    function updateInboxState() {
+        // Tel hoeveel er zijn opgelost
+        const solvedCount = chatDatabase.filter(c => c.solved).length;
+        // Tel hoeveel scams er in totaal in de database zitten (Sophie, Milan, Sem = 3)
+        const totalScams = chatDatabase.filter(c => c.type === 'scam').length;
+        
+        // Update de tekst (bv. "1/3")
+        const counterElement = document.getElementById('scams-found-counter');
+        if (counterElement) {
+            counterElement.innerText = `${solvedCount} / ${totalScams}`;
+        }
+
+        // Update de 'Klaar' knop
+        const btn = document.getElementById('phishing-finish-btn');
+        if (btn) {
+            if (solvedCount >= totalScams) {
+                // ALLES GEVONDEN!
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+                btn.style.backgroundColor = "#27ae60"; // Groen
+                btn.innerText = "Missie Voltooid! (Klik hier)";
+                // Zorg dat de klik de finish functie start
+                btn.onclick = finishPhishingGame;
+            } else {
+                // NOG NIET KLAAR
+                const nogTeVinden = totalScams - solvedCount;
+                btn.disabled = true;
+                btn.style.opacity = "0.5";
+                btn.style.cursor = "not-allowed";
+                btn.style.backgroundColor = ""; // Reset
+                btn.innerText = `Vind nog ${nogTeVinden} scam${nogTeVinden > 1 ? 's' : ''}`;
+            }
+        }
+    }
+
+    // --- 6. NAVIGATIE TERUG NAAR INBOX ---
+    window.returnToInbox = function() {
+        document.getElementById('insta-chat-view').style.display = 'none';
+        document.getElementById('insta-inbox-view').style.display = 'flex';
+        
+        renderChatList();   // Ververs de lijst (zodat vinkjes zichtbaar worden)
+        updateInboxState(); // Check of we klaar zijn
+    }
+
+    // --- 7. GAME AFRONDEN (Klaar knop ingedrukt) ---
+    window.finishPhishingGame = function() {
+        // 1. Sluit de Game Modal
+        document.getElementById('phishing-modal').style.display = 'none';
+
+        // 3. Open de Succes Modal
+        document.getElementById('phishing-success-modal').style.display = 'flex';
+    }
+
+    // --- 8. LEVEL VOLTOOID (Knop in Succes Modal) ---
+    // BELANGRIJK: Zorg dat je knop in de HTML deze functie aanroept: onclick="finishPhishingLevel()"
+    window.finishPhishingLevel = function() {
+        // 1. Sluit succes modal
+        document.getElementById('phishing-success-modal').style.display = 'none';
+        isModalOpen = false;
+
+        // 2. Zet de game op 'Gehaald' (Unlock)
+        level5Unlocked = true;
+
+        // 3. Ga naar de volgende slide (Slide 20)
+        // Huidige slide index is 18. +1 = 19 (Dat is Slide 20 in de array)
+        changeSlide(1);
+    }
 
 })();
+
