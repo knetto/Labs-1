@@ -1108,7 +1108,7 @@ function nextLogic(currentList) {
                 { text: "Hee, is jouw bestelling van Zalando al binnen?", sender: 'them', type: 'safe', feedback: "Gewoon een vriendin die iets vraagt." },
                 { text: "Nog niet, komt morgen denk ik.", sender: 'me' },
                 { text: "De mijne kwam net, maar hij is echt veel te groot :(", sender: 'them', type: 'safe', feedback: "Balen voor haar, maar geen scam." },
-                { text: "Ah dat is kut. Welke had je?", sender: 'me' },
+                { text: "Ah dat is taai. Welke had je?", sender: 'me' },
                 { text: "Kijk deze bedoelde ik:", sender: 'them', type: 'safe', feedback: "Ze stuurt een voorbeeld." },
                 { text: "https://www.zalando.nl/hoodie-black-123", sender: 'them', type: 'tricky', feedback: "Dit is een link naar een echte webshop (zalando.nl). Niets mis mee." }
             ]
