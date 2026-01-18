@@ -202,6 +202,9 @@
             <p style="text-align: right; font-weight: bold; color: #666;">
                 Gevonden types: <span id="score" style="color: #2196f3;">0</span>/6
             </p>
+            <button class="hint-btn" onclick="showWebsiteHint()" style="background: #ff9800; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                💡 Toon Hint
+            </button>
     
             <div class="browser-window">
                 <div class="browser-header">
@@ -389,7 +392,7 @@
 
                 <p style="text-align: right; font-weight: bold; color: #666;">
                     Gevonden fakes: <span id="news-score" style="color: #2196f3;">0</span>/5
-                </p>
+                </p>`
             
             <div class="browser-window" style="margin: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden;">
                 <div class="browser-header">
@@ -783,8 +786,17 @@
         
                     <div class="game-footer-status">
                         <p>Vind de <strong>2 oplichters</strong>.<br>
-                        Status: <span id="scams-found-counter">0</span>/3</p>
-                        <button class="save-btn small-btn" id="phishing-finish-btn" onclick="finishPhishingGame()" disabled style="opacity: 0.5;">Klaar</button>
+                        Status: <span id="scams-found-counter">0</span></p>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button class="save-btn small-btn" onclick="giveHint()" style="background-color: orange; cursor: pointer;">
+                                💡 Hint
+                            </button>
+                    
+                            <button class="save-btn small-btn" id="phishing-finish-btn" onclick="finishPhishingGame()" disabled style="opacity: 0.5;">
+                                Klaar
+                            </button>
+                        </div>
                     </div>
                 </div>
         

@@ -432,67 +432,170 @@
     }
 
     // ==========================================
+    // HINT LOGICA (ORANJE FEEDBACK)
+    // ==========================================
+    window.showWebsiteHint = function() {
+        const feedbackBox = document.getElementById('feedback-box');
+        const allTypes = ['protocol', 'domain', 'urgency', 'grammar', 'price', 'trust'];
+        
+        // Zoek welk type nog NIET gevonden is
+        const missingType = allTypes.find(type => !foundTypes.includes(type));
+
+        // Als alles al gevonden is
+        if (!missingType) {
+            feedbackBox.className = ''; // Reset classes (standaard groen)
+            feedbackBox.style.display = 'block';
+            feedbackBox.innerHTML = "<strong>Goed bezig!</strong> Je hebt alles al gevonden.";
+            return;
+        }
+
+        let hintText = "";
+        switch(missingType) {
+            case 'protocol': hintText = "Kijk helemaal bovenaan in de adresbalk. Mist daar iets?"; break;
+            case 'domain': hintText = "Kijk naar de link (URL). Is de extensie (.xyz) wel logisch?"; break;
+            case 'urgency': hintText = "Is er iets op de pagina dat je probeert te haasten (tijdnood)?"; break;
+            case 'grammar': hintText = "Lees de teksten rustig door. Klopt het Nederlands wel?"; break;
+            case 'price': hintText = "Vergelijk de 'oude' en 'nieuwe' prijzen. Is dit realistisch?"; break;
+            case 'trust': hintText = "Scroll naar beneden (footer). Staan daar echte gegevens?"; break;
+        }
+
+        // 1. Toon de box
+        feedbackBox.style.display = 'block';
+        
+        // 2. Voeg de oranje hint-klasse toe
+        feedbackBox.classList.add('feedback-hint');
+        
+        // 3. Zet de tekst erin
+        feedbackBox.innerHTML = `<strong>💡 HINT:</strong> ${hintText}`;
+    }
+
+    // ==========================================
     // 7. LEVEL 2 LOGICA (FAKE WEBSITE)
     // ==========================================
+// Houd bij welke types al gevonden zijn (zodat we geen dubbele hints geven)
+let foundNewsItems = []; 
 
-    window.checkFake = function(element, type) {
-        // --- ANTI SPAM CHECK ---
-        if (checkSpamProtection()) return; 
-        
-        // 1. Markeer het element ALTIJD als gevonden (visueel rood)
-        if (!element.classList.contains('found')) {
-            element.classList.add('found');
-        }
+window.showNewsHint = function() {
+    const feedbackBox = document.getElementById('news-feedback-box');
+    
+    // Lijst van alle fake 'reasons' die in het spel zitten
+    const allFakeItems = ['roblox', 'ai_fire', 'xyz_crisis', 'medical_hair', 'iphone_scam'];
+    
+    // Zoek een item dat nog NIET in de foundNewsItems lijst zit
+    const missingItem = allFakeItems.find(item => !foundNewsItems.includes(item));
 
-        // 2. Bepaal de uitleg tekst
-        let explanation = "";
-        switch(type) {
-            case 'protocol':
-                explanation = "De verbinding is niet veilig ('http' in plaats van 'https') en de browser waarschuwt hiervoor. Vul nooit gegevens in op zo'n site!";
-                break;
-            case 'domain':
-                explanation = "Kijk goed naar het webadres. '.xyz' is een goedkope extensie die vaak door oplichters wordt gebruikt. Ook is de naam erg lang en generiek.";
-                break;
-            case 'urgency':
-                explanation = "Dit heet 'nep-urgentie'. Oplichters gebruiken een aflopende klok om stress te creëren. Ze willen dat je stopt met kritisch nadenken en snel betaalt.";
-                break;
-            case 'grammar':
-                explanation = "Je hebt een taalfout gevonden (zoals d/t-fouten of kromme zinnen). Professionele winkels hebben dit zelden.";
-                break;
-            case 'price':
-                explanation = "De korting is verdacht. Hoge kortingen (30%+) op gloednieuwe producten zijn vaak te mooi om waar te zijn.";
-                break;
-             case 'trust':
-                explanation = "Bedrijfsgegevens onderaan de pagina (zoals KVK nummers) zijn op nepsites vaak verzonnen of gestolen van andere bedrijven.";
-                break;
-        }
-
-        const feedbackBox = document.getElementById('feedback-box');
+    if (!missingItem) {
+        // Alles is al gevonden (of speler klikt hint terwijl hij klaar is)
         feedbackBox.style.display = 'block';
+        feedbackBox.classList.remove('feedback-hint');
+        feedbackBox.style.background = '#e3f2fd'; // Terug naar standaard blauw/neutraal
+        feedbackBox.innerHTML = "<strong>Goed bezig!</strong> Je hebt al het nepnieuws al gevonden.";
+        return;
+    }
 
-        // 3. Check of dit TYPE fout al eerder gevonden is
-        if (foundTypes.includes(type)) {
-            // TYPE AL GEVONDEN: Geen punten erbij, wel uitleg tonen
-            feedbackBox.innerText = "Dat klopt ook! Dit is dezelfde soort fout (" + type + ") als je al eerder vond. \n\n" + explanation;
-        } else {
-            // NIEUW TYPE: Punten erbij!
-            foundTypes.push(type);
-            score++;
-            document.getElementById('score').innerText = score;
-            feedbackBox.innerText = "Scherp gezien! " + explanation;
-            
-            // Win conditie: 6 unieke types
-            if (score >= 6) {
-                const btn = document.getElementById('finish-btn');
+    let hintText = "";
+    switch(missingItem) {
+        case 'roblox': hintText = "Zoek naar een bericht over Roblox. Kijk goed naar het 'slotje' en de URL."; break;
+        case 'ai_fire': hintText = "Is er een foto die er wel heel dramatisch uitziet? Misschien is hij niet echt..."; break;
+        case 'xyz_crisis': hintText = "Zoek naar financieel nieuws. Vertrouw je die link (.xyz)?"; break;
+        case 'medical_hair': hintText = "Zoek naar een medisch 'wondermiddel'. Klinkt het te mooi om waar te zijn?"; break;
+        case 'iphone_scam': hintText = "Zoek naar een bericht waarin je zomaar iets duurs wint."; break;
+    }
+
+    // 1. Reset eventuele inline styles (zodat de oranje class werkt)
+    feedbackBox.style.background = '';
+    feedbackBox.style.color = '';
+    feedbackBox.style.border = '';
+
+    // 2. Toon de box met oranje stijl
+    feedbackBox.style.display = 'block';
+    feedbackBox.classList.add('feedback-hint');
+    
+    // 3. De tekst
+    feedbackBox.innerHTML = `<strong>💡 HINT:</strong> ${hintText}`;
+}
+    window.checkNews = function(element, type, reason) {
+    // --- ANTI SPAM CHECK ---
+    if (typeof checkSpamProtection === 'function' && checkSpamProtection()) return;
+
+    const feedbackBox = document.getElementById('news-feedback-box');
+    
+    // BELANGRIJK: Verwijder de oranje hint-klasse direct bij een klik
+    feedbackBox.classList.remove('feedback-hint');
+    
+    // Als al gevonden of geklikt, stop
+    if (element.classList.contains('found-fake') || element.classList.contains('checked-real')) return;
+
+    if (type === 'fake') {
+        // GOED: Het is nep
+        element.classList.add('found-fake');
+        
+        // NIEUW: Voeg de reden toe aan de lijst met gevonden items (voor de hints)
+        if (!foundNewsItems.includes(reason)) {
+            foundNewsItems.push(reason);
+        }
+
+        newsScore++;
+        
+        // Check of element bestaat voordat we updaten
+        if(document.getElementById('news-score')) {
+            document.getElementById('news-score').innerText = newsScore;
+        }
+        
+        feedbackBox.style.display = 'block';
+        feedbackBox.style.background = '#e3f2fd'; // Lichtblauw
+        feedbackBox.style.color = '#0d47a1'; // Donkerblauw
+        feedbackBox.style.border = '1px solid #2196f3';
+        
+        // Specifieke uitleg per type nepnieuws
+        let message = "<strong>Goed gezien! Dit is nep.</strong><br>";
+        
+        if (reason === 'roblox') {
+            message += "Kijk goed naar de URL: er staat <b>http</b> in plaats van <b>https</b>. Dat betekent dat de verbinding niet veilig is. Officiële sites gebruiken altijd https (met een slotje).";
+        } else if (reason === 'ai_fire') {
+            message += "Dit is een <b>AI-gegenereerde</b> afbeelding. De Eiffeltoren is van smeedijzer en kan helemaal niet op deze manier branden! Check altijd betrouwbare bronnen (NOS, NU.nl).";
+        } else if (reason === 'xyz_crisis') {
+            message += "Kijk naar het webadres: het eindigt op <b>.xyz</b>. Officiële banken gebruiken nooit dit soort goedkope domeinnamen. Dit is een poging tot paniekzaaierij.";
+        } else if (reason === 'medical_hair') {
+            message += "Als iets te mooi klinkt om waar te zijn ('haar groeit terug in 3 dagen'), is het dat ook. Medische wondermiddelen bestaan niet op het internet.";
+        } else if (reason === 'iphone_scam') {
+            message += "Je wint nooit zomaar een dure iPhone door een webpagina te bezoeken. Dit is een klassieke truc om je gegevens te stelen.";
+        }
+        
+        feedbackBox.innerHTML = message;
+
+        // Check Win Conditie (5 items)
+        if (newsScore >= 5) {
+            const btn = document.getElementById('news-finish-btn');
+            if(btn) {
                 btn.disabled = false;
                 btn.style.opacity = '1';
                 btn.style.cursor = 'pointer';
                 btn.innerText = "Doorgaan (Level Gehaald)";
-                
-                feedbackBox.innerText += "\n\nFantastisch! Je hebt alle 6 de signalen gevonden en de fake website ontmaskerd.";
             }
+            feedbackBox.innerHTML += "<br><br><strong>🎉 Geweldig! Je hebt alle 5 de nepberichten en scams eruit gevist.</strong>";
+            feedbackBox.style.background = '#d1f2eb'; // Feestelijk groen
+            feedbackBox.style.color = '#117a65';
+            feedbackBox.style.border = '1px solid #2ecc71';
         }
+
+    } else {
+        // FOUT: Het is echt nieuws
+        element.classList.add('checked-real'); // Maak groen
+        
+        feedbackBox.style.display = 'block';
+        feedbackBox.style.background = '#ffebee'; // Rood achtig
+        feedbackBox.style.color = '#c62828';
+        feedbackBox.style.border = '1px solid #ef5350';
+        
+        feedbackBox.innerHTML = "<strong>Dit bericht is waarschijnlijk echt.</strong><br>Het komt van een normale bron en bevat geen vreemde URL's, spelfouten of 'te mooie' beloftes. Het kan 'saai' nieuws zijn, maar dat maakt het nog niet nep!";
+        
+        // Haal de groene kleur na 1.5 seconde weer weg
+        setTimeout(() => {
+            element.classList.remove('checked-real');
+        }, 1500);
     }
+}
 
     // Reset functie voor level 2
     window.resetWebsiteGame = function() {
@@ -1060,6 +1163,7 @@ function nextLogic(currentList) {
             avatar: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)', 
             preview: 'De stemming sluit bijna! 😱',
             solved: false,
+            hint: "Kijk eens bij <strong>Sophie</strong>. Ze zet wel erg veel druk op je om snel te klikken...",
             messages: [
                 { text: "Dinsdag 14:23", type: 'timestamp' },
                 { text: "Heeii! Lang niet gesproken! Hoe is het? ❤️", sender: 'them', type: 'safe', feedback: "Beetje slijmen vooraf..." },
@@ -1178,37 +1282,41 @@ function nextLogic(currentList) {
                         { text: "https://tikkie.me/pay/Fleur/29dj29", sender: 'them', type: 'tricky', feedback: "Goed gezien! 'tikkie.me' is de officiële en veilige link van Tikkie." }
                     ]
                 },// --- SCAM 2: De Roblox Hater (Milan) die "gehackt" is ---
-        {
-            id: 'scam2',
-            type: 'scam',
-            name: 'Milan_010',
-            avatar: 'darkblue',
-            preview: 'Yo check dit ff',
-            solved: false,
-            messages: [
-                // --- DAG 1: Het bewijs dat hij het haat ---
-                { text: "Maandag 19:30", type: 'timestamp' },
-                { text: "Bro, kom je vanavond FIFA?", sender: 'them', type: 'safe', feedback: "Gewoon een oude chat." },
-                { text: "Nah man, ben ff Roblox aan t doen. Join je?", sender: 'me' }, 
-
-                { text: "Ik ga echt geen Roblox doen man, dat is voor kleuters 😂", sender: 'them', type: 'safe', feedback: "BELANGRIJKE HINT: Milan haat Roblox. Onthoud dit!" },
-                { text: "Nooit meer vragen gap, ik speel dat niet.", sender: 'them', type: 'safe', feedback: "Hij is heel duidelijk: hij speelt dit niet." },
-                { text: "Haha is goed rustig maar.", sender: 'me' },
-
-                // --- DAG 2: Tussendoor normaal gesprek ---
-                { text: "Gisteren 16:15", type: 'timestamp' },
-                { text: "Gaan we nog trainen morgen?", sender: 'them', type: 'safe', feedback: "Normaal gesprek, niks aan de hand." },
-                { text: "Ja sws, ben er om 19u.", sender: 'me' }, 
-
-                // --- DAG 3: De Hack (Met de lastige link) ---
-                { text: "Zojuist", type: 'timestamp' },
-                { text: "Yo bro! Kijk dit event, ik heb net 10.000 Robux gekregen!", sender: 'them', type: 'scam', reason: "grammar", feedback: "Alarmbellen! 🚩 Gisteren haatte hij het nog en vond het voor kleuters. Dit is Milan niet, hij is gehackt!" },
-                { text: "Huh? Jij haatte dat toch?", sender: 'me' }, 
-
-                { text: "Ja maar dit is gratis geld bro. Klik snel hier:", sender: 'them', type: 'scam', reason: "link", 
-                  feedback: "⚠️ <strong>HEEL TRICKY!</strong><br>Deze link lijkt veilig (slotje + .com), maar de naam klopt niet.<br>De echte site is roblox.com, niet <em>roblox-app</em>.<br><strong>DE GOUDEN TIP:</strong><br>Moet je na het klikken opnieuw inloggen? <strong>STOP!</strong> 🛑<br>Ga zelf naar de echte site. Ben je daar wel nog ingelogd? Dan is deze link nep." }
-            ]
-        },
+                {
+                    id: 'scam2',
+                    type: 'scam',
+                    name: 'Milan_010',
+                    avatar: 'darkblue',
+                    preview: 'Hee, voeg me even toe',
+                    solved: false,
+                    hint: "Check de chat van <strong>Milan</strong>. Eerst haatte hij dat spelletje, en nu stuurt hij ineens een link?",
+                    messages: [
+                        // --- DAG 1: Het bewijs dat hij het haat ---
+                        { text: "Maandag 19:30", type: 'timestamp' },
+                        { text: "Bro, kom je vanavond FIFA?", sender: 'them', type: 'safe', feedback: "Gewoon een oude chat." },
+                        { text: "Nah man, ben ff Roblox aan t doen. Join je?", sender: 'me' }, 
+        
+                        { text: "Ik ga echt geen Roblox doen man, dat is voor kleuters 😂", sender: 'them', type: 'safe', feedback: "BELANGRIJKE HINT: Milan haat Roblox en praat in straattaal." },
+                        { text: "Nooit meer vragen gap, ik speel dat niet.", sender: 'them', type: 'safe', feedback: "Hij is heel duidelijk: hij speelt dit niet." },
+                        { text: "Haha is goed rustig maar.", sender: 'me' },
+        
+                        // --- DAG 2: Tussendoor normaal gesprek ---
+                        { text: "Gisteren 16:15", type: 'timestamp' },
+                        { text: "Gaan we nog trainen morgen?", sender: 'them', type: 'safe', feedback: "Normaal gesprek, niks aan de hand." },
+                        { text: "Ja sws, ben er om 19u.", sender: 'me' }, 
+        
+                        // --- DAG 3: De Hack (Het generieke bericht) ---
+                        { text: "Zojuist", type: 'timestamp' },
+                        { text: "Hee, voeg me even toe zodat we samen kunnen spelen.", sender: 'them', type: 'scam', reason: "behavior", feedback: "🚩 <strong>Hacked Account!</strong><br>Vergelijk dit bericht eens met hoe hij eerder praatte. Eerst: 'Bro', 'Gap', 'Kleuters'.<br>Nu ineens een nette, saaie zin? Dit is een automatisch bericht van een hacker." },
+                        
+                        { text: "Huh? Jij haatte dat toch?", sender: 'me' }, 
+        
+                        { text: "Accepteer het verzoek via deze link:", sender: 'them', type: 'scam', reason: "link", 
+                          feedback: "⚠️ <strong>BOT GEDRAG & FOUTE LINK!</strong><br>1. Hij negeert je vraag volledig (want het is een script).<br>2. De link is <em>roblox-player-add.com</em> in plaats van <strong>roblox.com</strong>.<br><br><strong>TIP:</strong> Klik nooit op links als iemand zich ineens vreemd gedraagt!" },
+                          
+                        { text: "https://www.roblox-player-add.com/invite/Milan", sender: 'them', type: 'scam', reason: "link", feedback: "Zoals hierboven: Foute link en verdacht gedrag." }
+                    ]
+                },
         
                 // --- REAL 7: Oma (Beetje onhandig, maar veilig) ---
                 {
@@ -1270,6 +1378,7 @@ function nextLogic(currentList) {
                     avatar: '#3498db', // Blauw
                     preview: 'OMG ben jij dit?? 💀',
                     solved: false,
+                    hint: "Ga naar <strong>Sem</strong>. Hij probeert je bang te maken met een video waar je zogenaamd op staat.",
                     messages: [
                         { text: "Vandaag 19:12", type: 'timestamp' },
                         { text: "Ewa, alles goed?", sender: 'them', type: 'safe', feedback: "Lijkt veilig: Sem begint het gesprek normaal om vertrouwen te winnen." },
@@ -1287,6 +1396,31 @@ function nextLogic(currentList) {
                     ]
                 }
     ];
+
+    // --- NIEUWE FUNCTIE: GEEF HINT ---
+    window.giveHint = function() {
+        // 1. Filter de lijst op scams die nog NIET zijn opgelost
+        const hiddenScams = chatDatabase.filter(chat => chat.type === 'scam' && chat.solved === false);
+
+        // 2. Elementen ophalen voor feedback
+        const feedbackOverlay = document.getElementById('phishing-feedback-overlay');
+        const feedbackText = document.getElementById('phishing-feedback-text');
+
+        // 3. Check of er nog scams zijn
+        if (hiddenScams.length === 0) {
+            // Alles is al gevonden
+            feedbackText.innerHTML = "<strong>Goed bezig!</strong><br>Je hebt alle oplichters al gevonden. Klik op 'Klaar'!";
+        } else {
+            // 4. Pak de eerste niet-gevonden scam
+            const target = hiddenScams[0];
+            
+            // Toon de hint die we in Stap 2 hebben toegevoegd
+            feedbackText.innerHTML = `<strong>💡 Hint nodig?</strong><br>${target.hint}`;
+        }
+
+        // 5. Toon de overlay (deze sluit al als je erop klikt door je bestaande code)
+        feedbackOverlay.style.display = 'flex';
+    }
 
     let currentOpenChatId = null;
     let scamsSolvedCount = 0;
@@ -1580,6 +1714,7 @@ function nextLogic(currentList) {
         // Huidige slide index is 18. +1 = 19 (Dat is Slide 20 in de array)
         changeSlide(1);
     }
+    
 
 })();
 
