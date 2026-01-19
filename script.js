@@ -1093,7 +1093,7 @@ window.checkAI = function(side) {
     // We gebruiken een kleine vertraging zodat de gebruiker eerst ziet wat hij klikt
     setTimeout(function() {
         document.getElementById('ai-next-btn').style.display = 'inline-block';
-    }, 500);
+    }, 1500);
 
     
     if (currentPart === 1) {
