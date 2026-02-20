@@ -472,80 +472,6 @@
     // ==========================================
     // 7. LEVEL 2 LOGICA (FAKE WEBSITE)
     // ==========================================
-
-    window.checkFake = function(element, type) {
-        // --- ANTI SPAM CHECK ---
-        if (typeof checkSpamProtection === 'function' && checkSpamProtection()) return; 
-        
-        const feedbackBox = document.getElementById('feedback-box');
-
-        // BELANGRIJK: Verwijder de oranje hint-klasse zodat gewone feedback weer groen is
-        feedbackBox.classList.remove('feedback-hint');
-
-        // 1. Markeer het element ALTIJD als gevonden (visueel rood)
-        if (!element.classList.contains('found')) {
-            element.classList.add('found');
-        }
-
-        // 2. Bepaal de uitleg tekst
-        let explanation = "";
-        switch(type) {
-            case 'protocol':
-                explanation = "De verbinding is niet veilig ('http' in plaats van 'https') en de browser waarschuwt hiervoor. Vul nooit gegevens in op zo'n site!";
-                break;
-            case 'domain':
-                explanation = "Kijk goed naar het webadres. '.xyz' is een goedkope extensie die vaak door oplichters wordt gebruikt. Ook is de naam erg lang en generiek.";
-                break;
-            case 'urgency':
-                explanation = "Dit heet 'nep-urgentie'. Oplichters gebruiken een aflopende klok om stress te creëren. Ze willen dat je stopt met kritisch nadenken en snel betaalt.";
-                break;
-            case 'grammar':
-                explanation = "Je hebt een taalfout gevonden (zoals d/t-fouten of kromme zinnen). Professionele winkels hebben dit zelden.";
-                break;
-            case 'price':
-                explanation = "De korting is verdacht. Hoge kortingen (30%+) op gloednieuwe producten zijn vaak te mooi om waar te zijn.";
-                break;
-             case 'trust':
-                explanation = "Bedrijfsgegevens onderaan de pagina (zoals KVK nummers) zijn op nepsites vaak verzonnen of gestolen van andere bedrijven.";
-                break;
-        }
-
-        feedbackBox.style.display = 'block';
-
-        // 3. Check of dit TYPE fout al eerder gevonden is
-        if (foundTypes.includes(type)) {
-            // TYPE AL GEVONDEN: Geen punten erbij, wel uitleg tonen
-            feedbackBox.innerText = "Dat klopt ook! Dit is dezelfde soort fout (" + type + ") als je al eerder vond. \n\n" + explanation;
-        } else {
-            // NIEUW TYPE: Punten erbij!
-            foundTypes.push(type);
-            score++;
-            
-            // Update score element als dat bestaat
-            if(document.getElementById('score')) {
-                 document.getElementById('score').innerText = score;
-            }
-
-            feedbackBox.innerText = "Scherp gezien! " + explanation;
-            
-            // Win conditie: 6 unieke types
-            if (score >= 6) {
-                const btn = document.getElementById('finish-btn');
-                if(btn) {
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
-                    btn.style.cursor = 'pointer';
-                    btn.innerText = "Doorgaan (Level Gehaald)";
-                }
-                
-                feedbackBox.innerText += "\n\nFantastisch! Je hebt alle 6 de signalen gevonden en de fake website ontmaskerd.";
-            }
-        }
-    }
-
-    // ==========================================
-    // 7. LEVEL 2 LOGICA (FAKE WEBSITE)
-    // ==========================================
 // Houd bij welke types al gevonden zijn (zodat we geen dubbele hints geven)
 let foundNewsItems = []; 
 
@@ -1093,7 +1019,7 @@ window.checkAI = function(side) {
     // We gebruiken een kleine vertraging zodat de gebruiker eerst ziet wat hij klikt
     setTimeout(function() {
         document.getElementById('ai-next-btn').style.display = 'inline-block';
-    }, 1500);
+    }, 500);
 
     
     if (currentPart === 1) {
